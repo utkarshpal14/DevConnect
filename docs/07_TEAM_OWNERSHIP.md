@@ -18,8 +18,10 @@ Ownership is path-based. A member may modify only the paths assigned below. Shar
 backend/src/controllers/auth*
 backend/src/routes/auth*
 backend/src/middleware/*
+backend/src/middlewares/*
 backend/src/models/User*
 backend/src/models/StudentProfile*
+backend/src/modules/auth/*
 frontend/src/pages/auth/*
 frontend/src/pages/student/*
 ```

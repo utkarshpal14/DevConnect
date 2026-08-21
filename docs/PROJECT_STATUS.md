@@ -3,9 +3,16 @@
 ## Milestone 1
 
 ### Authentication
-- [ ] User Model
-- [ ] Register API
-- [ ] Login API
+- [x] User Model
+- [x] Register API
+- [x] Login API
+
+### Authentication Completion Checks
+- [x] Password hashing
+- [x] JWT authentication
+- [x] Role authorization middleware
+- [x] Protected current-user endpoint
+- [ ] Auth test suite verified in current environment
 
 ### Recruitment
 - [ ] Recruiter Model

@@ -442,13 +442,18 @@ Mandatory:
 
 Current Phase:
 
-Planning & Documentation Complete
+Milestone 1 - Authentication Implementation
+
+Status:
+
+User model, registration, login, JWT authentication, role authorization, and
+the protected current-user endpoint are implemented. The authentication test
+suite still needs to be executed successfully before Milestone 1 is formally
+closed.
 
 Next Phase:
 
-Milestone 1
-
-Authentication & User Management
+Student Portfolio and Recruitment Modules
 
 ---
 

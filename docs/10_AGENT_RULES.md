@@ -38,6 +38,10 @@ Agents must follow the path ownership matrix in `docs/07_TEAM_OWNERSHIP.md`:
 
 Shared paths require coordination with the affected owner.
 
+For the current authentication implementation, Member 1 owns
+`backend/src/modules/auth/*` and `backend/src/middlewares/*` in addition to the
+paths listed in `docs/07_TEAM_OWNERSHIP.md`.
+
 # 4. Scope and Change Limits
 
 Solve only the requested task. Prefer one to three files and never exceed five files for a single agent task unless explicitly approved. Do not rename, move, duplicate, or refactor unrelated modules.

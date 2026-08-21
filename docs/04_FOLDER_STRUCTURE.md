@@ -65,11 +65,19 @@ backend/
 │   ├── models/
 │   ├── routes/
 │   ├── middleware/
+│   ├── middlewares/
 │   ├── validators/
 │   ├── sockets/
 │   ├── cache/
 │   ├── utils/
 │   ├── constants/
+│   ├── modules/
+│   │   └── auth/
+│   │       ├── auth.controller.js
+│   │       ├── auth.repository.js
+│   │       ├── auth.routes.js
+│   │       ├── auth.service.js
+│   │       └── auth.validator.js
 │   ├── app.js
 │   └── server.js
 ├── tests/
@@ -116,6 +124,11 @@ docker/
 - Validators validate requests before services execute.
 - Routes register HTTP endpoints.
 - Middleware handles authentication, authorization, and shared request concerns.
+
+The current authentication implementation uses `src/modules/auth/` for its
+domain files and `src/middlewares/` for reusable authentication, role, and
+error middleware. New modules should follow the centralized layers above unless
+the module owner and team approve a domain-specific structure.
 
 # 8. Model Names
 
