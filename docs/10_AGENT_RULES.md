@@ -56,16 +56,30 @@ Solve only the requested task. Prefer one to three files and never exceed five f
 
 Every feature must cover its success case, validation failure, error handling, and authorization behavior. Agents must not mark work complete without running the relevant tests or validation command.
 
-# 7. Completion Checklist
+# 7. Frontend Design Requirements
+
+Frontend agents must produce natural, distinctive, human-designed interfaces
+that fit the DevConnect product and the user's task. They must not default to
+generic AI-generated layouts, dark themes, dark blue themes, purple-on-white
+palettes, excessive gradients, glowing blobs, bokeh, oversized marketing
+heroes, or nested card-heavy dashboards.
+
+Frontend work must include deliberate typography, color hierarchy, spacing,
+responsive behavior, meaningful states, and restrained purposeful motion. The
+result must be checked for content overlap, clipping, overflow, and mobile
+breakage before completion.
+
+# 8. Completion Checklist
 
 - Architecture unchanged.
 - Database schema unchanged.
 - API contracts unchanged.
 - Ownership respected.
 - Validation and error handling included.
+- Frontend design follows the human-made visual design requirements.
 - Tests executed and reported.
 
-# 8. Status
+# 9. Status
 
 Status: APPROVED
 

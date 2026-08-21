@@ -631,7 +631,49 @@ Avoid:
 
 ---
 
-# 25. Security Standards
+# 25. Frontend Visual Design Standards
+
+DevConnect frontend work must look intentionally designed by an experienced
+human UI designer. Visual decisions should serve the product domain, the user
+workflow, and the content on the screen.
+
+Mandatory rules:
+
+- Create a distinctive visual direction for each product surface instead of
+  reusing generic AI-generated website patterns.
+- Prefer natural, editorial, functional layouts with clear hierarchy and
+  purposeful spacing.
+- Use expressive typography, a considered color system, and real interface
+  states such as loading, empty, error, success, and disabled states.
+- Use visual assets that are relevant to the product when imagery is needed.
+- Make layouts responsive and usable on desktop, tablet, and mobile.
+- Use restrained, meaningful motion for transitions or feedback; avoid motion
+  that exists only as decoration.
+
+The following are prohibited unless an approved product design explicitly
+requires them:
+
+- Generic AI-generated or template-looking layouts.
+- Dark themes or dark blue themes as the default visual direction.
+- Purple-on-white defaults, excessive blue palettes, or one-note color systems.
+- Decorative gradient blobs, glowing orbs, bokeh, and vague abstract shapes.
+- Oversized hero sections, excessive rounded cards, card-within-card layouts,
+  and marketing-style filler in application workflows.
+- Repeated dashboard patterns that do not reflect the actual user task.
+- Placeholder copy, stock-like imagery, or decorative visuals that obscure the
+  real product, data, or action.
+
+Before frontend work is considered complete, review it for:
+
+- A clear and product-specific visual identity.
+- Readable hierarchy and deliberate spacing.
+- No overlapping, clipped, or overflowing content.
+- Consistent controls, icons, states, and responsive behavior.
+- A natural human-made result that does not resemble a generic AI template.
+
+---
+
+# 26. Security Standards
 
 Always:
 
@@ -657,7 +699,7 @@ Expose Internal Errors
 
 ---
 
-# 26. Testing Standards
+# 27. Testing Standards
 
 Every module should have:
 
@@ -675,7 +717,7 @@ Critical APIs require testing before merge.
 
 ---
 
-# 27. Documentation Standards
+# 28. Documentation Standards
 
 Whenever a major change occurs:
 
@@ -689,7 +731,7 @@ Documents take priority over implementation.
 
 ---
 
-# 28. AI Agent Rules
+# 29. AI Agent Rules
 
 Before coding:
 
@@ -727,7 +769,7 @@ Assigned Module Files
 
 ---
 
-# 29. Code Review Checklist
+# 30. Code Review Checklist
 
 Before Merge
 
@@ -747,7 +789,7 @@ Before Merge
 
 ---
 
-# 30. Status
+# 31. Status
 
 Status: APPROVED
 
