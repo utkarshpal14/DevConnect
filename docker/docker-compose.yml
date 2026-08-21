@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/backend/Dockerfile
+    env_file:
+      - ../backend/.env
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/frontend/Dockerfile
+    ports:
+      - "4173:4173"
+
+  ai-service:
+    build:
+      context: ..
+      dockerfile: docker/ai-service/Dockerfile
+    env_file:
+      - ../ai-service/.env
+    ports:
+      - "8000:8000"

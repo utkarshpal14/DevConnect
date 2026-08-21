@@ -173,14 +173,11 @@ DevConnect/
 
 # Team Structure
 
-## Member 1
+## Member 1 - Authentication & Student Module
 
 Module Ownership:
 
-- Authentication
-- Users
-- Student Profiles
-- Middleware
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
@@ -190,13 +187,11 @@ feature/auth
 
 ---
 
-## Member 2
+## Member 2 - Recruitment Module
 
 Module Ownership:
 
-- Recruiters
-- Jobs
-- Applications
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
@@ -206,11 +201,11 @@ feature/recruitment
 
 ---
 
-## Member 3
+## Member 3 - AI Module
 
 Module Ownership:
 
-- AI Service
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
@@ -220,15 +215,11 @@ feature/ai
 
 ---
 
-## Member 4
+## Member 4 - Admin + DevOps
 
 Module Ownership:
 
-- Notifications
-- Admin Dashboard
-- Redis
-- Docker
-- Deployment
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
