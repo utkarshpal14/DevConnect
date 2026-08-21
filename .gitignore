@@ -1,9 +1,29 @@
+# Node.js
 node_modules/
-.env
-.env.local
 dist/
 build/
-coverage/
-*.log
-.DS_Store
+
+# Python
 __pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment
+.env
+.env.local
+
+# Logs
+logs/
+*.log
+
+# Coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
