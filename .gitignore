@@ -1,28 +1,28 @@
-# Node
-node_modules
-dist
-build
+# Node.js
+node_modules/
+dist/
+build/
 
 # Python
-__pycache__
+__pycache__/
 *.pyc
-.venv
-venv
+.venv/
+venv/
 
 # Environment
 .env
 .env.local
 
 # Logs
-logs
+logs/
 *.log
 
 # Coverage
-coverage
+coverage/
 
 # IDE
-.vscode
-.idea
+.vscode/
+.idea/
 
 # OS
 .DS_Store
