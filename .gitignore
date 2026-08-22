@@ -24,6 +24,9 @@ coverage/
 .vscode/
 .idea/
 
+# Uploads
+uploads/
+
 # OS
 .DS_Store
 Thumbs.db

@@ -1,6 +1,8 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const authRoutes = require('./routes/auth.routes');
+const studentRoutes = require('./routes/student.routes');
 const errorHandler = require('./middlewares/error.middleware');
 
 const app = express();
@@ -9,6 +11,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static uploaded files
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Health check endpoint
 app.get('/api/v1/health', (req, res) => {
@@ -23,6 +28,7 @@ app.get('/api/v1/health', (req, res) => {
 
 // Mount Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/students', studentRoutes);
 
 // Handle 404 for unmatched routes
 app.use('*', (req, res) => {
