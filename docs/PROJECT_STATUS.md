@@ -32,13 +32,17 @@
 
 ---
 
-## Milestone 3 — Recruiter & Job Management (Member 2)
+## Milestone 3 ✅ COMPLETED (Member 2)
 
 ### Recruitment
-- [ ] Recruiter Model
-- [ ] Job CRUD
-- [ ] Search & Filtering
-- [ ] Pagination
+- [x] Recruiter Profile Model
+- [x] Recruiter Profile APIs
+- [x] Job CRUD
+- [x] Close Job API
+- [x] Search & Filtering
+- [x] Pagination
+- [x] Recruiter ownership protection
+- [x] Recruitment test suite verified (5/5 tests passing)
 
 ---
 

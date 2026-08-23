@@ -3,6 +3,8 @@ const path = require('path');
 const cors = require('cors');
 const authRoutes = require('./routes/auth.routes');
 const studentRoutes = require('./routes/student.routes');
+const recruiterRoutes = require('./modules/recruiters/recruiters.routes');
+const jobsRoutes = require('./modules/jobs/jobs.routes');
 const errorHandler = require('./middlewares/error.middleware');
 
 const app = express();
@@ -29,6 +31,8 @@ app.get('/api/v1/health', (req, res) => {
 // Mount Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/students', studentRoutes);
+app.use('/api/v1/recruiters', recruiterRoutes);
+app.use('/api/v1/jobs', jobsRoutes);
 
 // Handle 404 for unmatched routes
 app.use('*', (req, res) => {
