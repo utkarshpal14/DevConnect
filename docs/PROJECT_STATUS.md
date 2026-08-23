@@ -46,12 +46,18 @@
 
 ---
 
-## Milestone 4 — Application Management (Member 2)
+## Milestone 4 ✅ COMPLETED (Member 2)
 
-- [ ] Apply for Job
-- [ ] Withdraw Application
-- [ ] Applicant List
-- [ ] Status Updates
+- [x] Application Model
+- [x] Apply for Job
+- [x] Duplicate application prevention
+- [x] Withdraw Application
+- [x] Student application list
+- [x] Recruiter applicant list
+- [x] Application status updates
+- [x] Recruiter ownership protection
+- [x] Closed-job application prevention
+- [x] Application test suite verified (5/5 tests passing)
 
 ---
 
