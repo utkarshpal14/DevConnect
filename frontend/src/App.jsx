@@ -3,10 +3,12 @@ import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
 import StudentHome from './pages/student/StudentHome.jsx';
 import StudentPortfolio from './pages/student/StudentPortfolio.jsx';
+import RecruiterDashboard from './pages/recruiter/RecruiterDashboard.jsx';
+import JobsPortal from './pages/common/JobsPortal.jsx';
 import { getUser, isAuthenticated, logout } from './pages/auth/storage.js';
 
 export default function App() {
-  const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio'
+  const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio' | 'jobs'
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -30,17 +32,60 @@ export default function App() {
     setView('login');
   };
 
-  if (view === 'portfolio' && currentUser) {
-    if (currentUser.role === 'student') {
+  // Student Views
+  if (currentUser && currentUser.role === 'student') {
+    if (view === 'portfolio') {
       return <StudentPortfolio user={currentUser} onLogout={handleLogout} />;
+    }
+    if (view === 'jobs') {
+      return (
+        <JobsPortal
+          user={currentUser}
+          onBack={() => setView('home')}
+        />
+      );
+    }
+    if (view === 'home') {
+      return (
+        <StudentHome
+          user={currentUser}
+          onOpenPortfolio={() => setView('portfolio')}
+          onBrowseJobs={() => setView('jobs')}
+          onLogout={handleLogout}
+        />
+      );
     }
   }
 
-  if (view === 'home' && currentUser && currentUser.role === 'student') {
-    return <StudentHome user={currentUser} onOpenPortfolio={() => setView('portfolio')} onLogout={handleLogout} />;
+  // Recruiter Views
+  if (currentUser && currentUser.role === 'recruiter') {
+    if (view === 'jobs') {
+      return (
+        <JobsPortal
+          user={currentUser}
+          onBack={() => setView('home')}
+        />
+      );
+    }
+    return (
+      <RecruiterDashboard
+        user={currentUser}
+        onBrowseJobs={() => setView('jobs')}
+        onLogout={handleLogout}
+      />
+    );
   }
 
+  // Fallback for Admin or Other Roles
   if (currentUser) {
+    if (view === 'jobs') {
+      return (
+        <JobsPortal
+          user={currentUser}
+          onBack={() => setView('home')}
+        />
+      );
+    }
     return (
       <div className="auth-page">
         <main className="auth-card" style={{ maxWidth: '520px', textAlign: 'center' }}>
@@ -50,7 +95,7 @@ export default function App() {
           </header>
 
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>
-            {currentUser.role === 'student' ? '🎓' : '💼'}
+            🛡️
           </div>
 
           <h1 className="auth-title">Welcome, {currentUser.fullName}!</h1>
@@ -76,20 +121,25 @@ export default function App() {
               <span style={{ color: 'var(--text-muted)' }}>Status: </span>
               <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>Active Session (JWT Stored)</span>
             </div>
-            <div>
-              <span style={{ color: 'var(--text-muted)' }}>Next Slices: </span>
-              <span>Student Portfolio (M2) & Recruiter Jobs (M3)</span>
-            </div>
           </div>
 
-          <button
-            type="button"
-            className="btn-submit"
-            style={{ background: 'rgba(248, 81, 73, 0.15)', border: '1px solid var(--border-error)', color: '#ff7b72', boxShadow: 'none' }}
-            onClick={handleLogout}
-          >
-            Sign Out
-          </button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              type="button"
+              className="btn-submit"
+              onClick={() => setView('jobs')}
+            >
+              Browse Jobs Portal &rarr;
+            </button>
+            <button
+              type="button"
+              className="btn-submit"
+              style={{ background: 'rgba(248, 81, 73, 0.15)', border: '1px solid var(--border-error)', color: '#ff7b72', boxShadow: 'none' }}
+              onClick={handleLogout}
+            >
+              Sign Out
+            </button>
+          </div>
         </main>
       </div>
     );
