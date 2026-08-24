@@ -32,49 +32,22 @@
 
 ---
 
-## Milestone 3 ✅ COMPLETED (Member 2)
+## Milestone 3 — Recruiter & Job Management (Member 2)
 
 ### Recruitment
-- [x] Recruiter Profile Model
-- [x] Recruiter Profile APIs
-- [x] Job CRUD
-- [x] Close Job API
-- [x] Search & Filtering
-- [x] Pagination
-- [x] Recruiter ownership protection
-- [x] Recruitment test suite verified (5/5 tests passing)
+- [ ] Recruiter Model
+- [ ] Job CRUD
+- [ ] Search & Filtering
+- [ ] Pagination
 
 ---
 
-## Milestone 4 ✅ COMPLETED (Member 2)
+## Milestone 4 — Application Management (Member 2)
 
-- [x] Application Model
-- [x] Apply for Job
-- [x] Duplicate application prevention
-- [x] Withdraw Application
-- [x] Student application list
-- [x] Recruiter applicant list
-- [x] Application status updates
-- [x] Recruiter ownership protection
-- [x] Closed-job application prevention
-- [x] Application test suite verified (5/5 tests passing)
-
----
-
-## Frontend Design Phase — ACTIVE (After Milestone 4)
-
-- [ ] Member 1: Milestone 1 authentication UI on `feature/auth`
-- [ ] Member 2: Milestone 2 student portfolio UI on `feature/recruitment`
-- [ ] Member 3: Milestone 3 recruiter and jobs UI on `feature/ai`
-- [ ] Member 4: Milestone 4 applications UI on `feature/admin-devops`
-- [ ] Shared routes/services/app-shell coordination completed
-- [ ] Responsive and visual design review completed
-
-Frontend ownership and conflict rules are defined in `docs/07_TEAM_OWNERSHIP.md`
-and `docs/06_GIT_WORKFLOW.md`.
-
-Milestones 5 onward are deferred and will use an extended schedule after this
-frontend phase is completed.
+- [ ] Apply for Job
+- [ ] Withdraw Application
+- [ ] Applicant List
+- [ ] Status Updates
 
 ---
 
@@ -97,10 +70,7 @@ frontend phase is completed.
 
 ---
 
-## Milestone 7 — Final Frontend Integration (All Members)
-
-This milestone follows the per-milestone frontend design phase and connects
-the AI, notification, admin, and remaining platform workflows.
+## Milestone 7 — Frontend Integration (All Members)
 
 - [ ] Authentication UI
 - [ ] Student Dashboard
@@ -109,6 +79,7 @@ the AI, notification, admin, and remaining platform workflows.
 - [ ] Admin Dashboard
 
 ---
+
 
 ## DevOps (Milestone 8)
 - [ ] Docker

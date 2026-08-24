@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — DevConnect</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./auth.css" />
+</head>
+<body>
+  <div class="auth-page">
+    <main class="auth-card" role="main">
+      <!-- Brand Header -->
+      <header class="auth-brand">
+        <div class="auth-brand-icon">⚡</div>
+        <span class="auth-brand-name">DevConnect</span>
+      </header>
+
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-subtitle">Enter your credentials to access your account</p>
+
+      <!-- Alert Box for server-level feedback -->
+      <div id="form-alert" class="alert-box" style="display: none;" role="alert" aria-live="polite"></div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form" novalidate>
+        <!-- Email Field -->
+        <div class="field-group">
+          <label for="email" class="field-label">Email Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">✉</span>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="field-input"
+              placeholder="name@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+          <span id="email-error" class="field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Password Field -->
+        <div class="field-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label for="password" class="field-label">Password</label>
+            <a href="#" class="forgot-link" tabindex="-1">Forgot password?</a>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="field-input"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+            <button
+              type="button"
+              id="toggle-password"
+              class="toggle-password"
+              aria-label="Toggle password visibility"
+            >👁</button>
+          </div>
+          <span id="password-error" class="field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Remember Me Checkbox -->
+        <div class="checkbox-group">
+          <input type="checkbox" id="remember-me" name="remember-me" checked />
+          <label for="remember-me">Remember me on this device</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submit-btn" class="btn-submit">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Footer Link to Register -->
+      <footer class="auth-footer">
+        Don't have an account? <a href="./register.html">Create one here</a>
+      </footer>
+    </main>
+  </div>
+
+  <!-- JavaScript Module Entry -->
+  <script type="module" src="./login.js"></script>
+</body>
+</html>
