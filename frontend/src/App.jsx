@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
+import StudentHome from './pages/student/StudentHome.jsx';
+import StudentPortfolio from './pages/student/StudentPortfolio.jsx';
 import { getUser, isAuthenticated, logout } from './pages/auth/storage.js';
 
 export default function App() {
-  const [view, setView] = useState('login'); // 'login' | 'register' | 'authenticated'
+  const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio'
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -12,14 +14,14 @@ export default function App() {
       const user = getUser();
       if (user) {
         setCurrentUser(user);
-        setView('authenticated');
+        setView('home');
       }
     }
   }, []);
 
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
-    setView('authenticated');
+    setView('home');
   };
 
   const handleLogout = () => {
@@ -28,7 +30,17 @@ export default function App() {
     setView('login');
   };
 
-  if (view === 'authenticated' && currentUser) {
+  if (view === 'portfolio' && currentUser) {
+    if (currentUser.role === 'student') {
+      return <StudentPortfolio user={currentUser} onLogout={handleLogout} />;
+    }
+  }
+
+  if (view === 'home' && currentUser && currentUser.role === 'student') {
+    return <StudentHome user={currentUser} onOpenPortfolio={() => setView('portfolio')} onLogout={handleLogout} />;
+  }
+
+  if (currentUser) {
     return (
       <div className="auth-page">
         <main className="auth-card" style={{ maxWidth: '520px', textAlign: 'center' }}>
