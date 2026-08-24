@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './recruiter.css';
 import CompanyProfile from './CompanyProfile.jsx';
 import JobFormModal from './JobFormModal.jsx';
+import JobApplicantsModal from '../../components/applications/JobApplicantsModal.jsx';
 import {
   getRecruiterProfile,
   getRecruiterJobs,
@@ -18,6 +19,7 @@ export default function RecruiterDashboard({ user, onLogout, onBrowseJobs }) {
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingJob, setEditingJob] = useState(null);
+  const [applicantsJob, setApplicantsJob] = useState(null);
   const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
 
   useEffect(() => {
@@ -268,6 +270,14 @@ export default function RecruiterDashboard({ user, onLogout, onBrowseJobs }) {
                             <button
                               type="button"
                               className="btn-action-sm"
+                              style={{ background: 'var(--recruiter-teal, #1e6353)', color: '#fff', border: 'none' }}
+                              onClick={() => setApplicantsJob(j)}
+                            >
+                              Applicants
+                            </button>
+                            <button
+                              type="button"
+                              className="btn-action-sm"
                               onClick={() => openEditJobModal(j)}
                             >
                               Edit
@@ -317,6 +327,13 @@ export default function RecruiterDashboard({ user, onLogout, onBrowseJobs }) {
           setEditingJob(null);
         }}
         onSave={handleCreateOrUpdateJob}
+      />
+
+      {/* Applicants Review Modal */}
+      <JobApplicantsModal
+        job={applicantsJob}
+        isOpen={Boolean(applicantsJob)}
+        onClose={() => setApplicantsJob(null)}
       />
     </div>
   );

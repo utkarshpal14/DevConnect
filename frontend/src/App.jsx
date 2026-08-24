@@ -3,12 +3,13 @@ import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
 import StudentHome from './pages/student/StudentHome.jsx';
 import StudentPortfolio from './pages/student/StudentPortfolio.jsx';
+import StudentApplications from './pages/student/StudentApplications.jsx';
 import RecruiterDashboard from './pages/recruiter/RecruiterDashboard.jsx';
 import JobsPortal from './pages/common/JobsPortal.jsx';
 import { getUser, isAuthenticated, logout } from './pages/auth/storage.js';
 
 export default function App() {
-  const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio' | 'jobs'
+  const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio' | 'jobs' | 'applications'
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -37,11 +38,23 @@ export default function App() {
     if (view === 'portfolio') {
       return <StudentPortfolio user={currentUser} onLogout={handleLogout} />;
     }
+    if (view === 'applications') {
+      return (
+        <StudentApplications
+          user={currentUser}
+          onBack={() => setView('home')}
+          onBrowseJobs={() => setView('jobs')}
+          onOpenPortfolio={() => setView('portfolio')}
+          onLogout={handleLogout}
+        />
+      );
+    }
     if (view === 'jobs') {
       return (
         <JobsPortal
           user={currentUser}
           onBack={() => setView('home')}
+          onViewApplications={() => setView('applications')}
         />
       );
     }
@@ -51,6 +64,7 @@ export default function App() {
           user={currentUser}
           onOpenPortfolio={() => setView('portfolio')}
           onBrowseJobs={() => setView('jobs')}
+          onViewApplications={() => setView('applications')}
           onLogout={handleLogout}
         />
       );
