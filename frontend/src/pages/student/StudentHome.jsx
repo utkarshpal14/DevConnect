@@ -7,19 +7,28 @@ const quickLinks = [
   { number: '03', label: 'Career signals', detail: 'Add credentials and achievements.' }
 ];
 
-export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onLogout }) {
+export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onViewApplications, onLogout }) {
   return (
     <div className="home-page">
       <header className="home-nav">
         <div className="home-brand"><span className="home-mark">D</span><span>DevConnect</span></div>
-        <div className="home-account">
+        <div className="home-account" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {onBrowseJobs && (
             <button
               type="button"
-              style={{ marginRight: '16px', background: 'transparent', border: '1px solid var(--home-line)', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 700, fontSize: '13px' }}
+              style={{ background: 'transparent', border: '1px solid var(--home-line)', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 700, fontSize: '13px' }}
               onClick={onBrowseJobs}
             >
               Browse Jobs &rarr;
+            </button>
+          )}
+          {onViewApplications && (
+            <button
+              type="button"
+              style={{ background: 'var(--home-teal)', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 700, fontSize: '13px' }}
+              onClick={onViewApplications}
+            >
+              My Applications
             </button>
           )}
           <span>{user.fullName}</span>
@@ -42,6 +51,16 @@ export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onLog
                 onClick={onBrowseJobs}
               >
                 Browse Opportunities <span>-&gt;</span>
+              </button>
+            )}
+            {onViewApplications && (
+              <button
+                className="home-cta"
+                type="button"
+                style={{ background: 'transparent', border: '1px solid var(--home-line)', color: 'var(--home-ink)' }}
+                onClick={onViewApplications}
+              >
+                Track Applications <span>-&gt;</span>
               </button>
             )}
           </div>

@@ -3,8 +3,9 @@ import './jobs.css';
 import JobCard from '../../components/jobs/JobCard.jsx';
 import JobFilters from '../../components/jobs/JobFilters.jsx';
 import { getJobs, getJobById } from './jobService.js';
+import { applyForJob, getMyApplications } from '../student/applicationService.js';
 
-export default function JobsPortal({ user, onBack, onApply }) {
+export default function JobsPortal({ user, onBack, onViewApplications }) {
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, pages: 1 });
@@ -18,10 +19,28 @@ export default function JobsPortal({ user, onBack, onApply }) {
 
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+
+  // Application States
+  const [appliedJobIds, setAppliedJobIds] = useState(new Set());
+  const [applyingJobId, setApplyingJobId] = useState(null);
 
   useEffect(() => {
     fetchJobListings();
+    if (user?.role === 'student') {
+      fetchUserApplications();
+    }
   }, [filters]);
+
+  const fetchUserApplications = async () => {
+    try {
+      const myApps = await getMyApplications();
+      const ids = new Set((myApps || []).map((app) => app.jobId?._id || app.jobId));
+      setAppliedJobIds(ids);
+    } catch (err) {
+      console.warn('Could not fetch student applications:', err);
+    }
+  };
 
   const fetchJobListings = async () => {
     try {
@@ -53,8 +72,25 @@ export default function JobsPortal({ user, onBack, onApply }) {
         setSelectedJob(detailed);
       }
     } catch (err) {
-      // Keep existing job data if detail request fails
       console.warn('Could not fetch extra details:', err);
+    }
+  };
+
+  const handleApplyClick = async (job) => {
+    if (!job || !job._id) return;
+    try {
+      setApplyingJobId(job._id);
+      setErrorMsg('');
+      setSuccessMsg('');
+      await applyForJob(job._id);
+
+      setAppliedJobIds((prev) => new Set(prev).add(job._id));
+      setSuccessMsg(`Successfully applied for "${job.title}"!`);
+      setTimeout(() => setSuccessMsg(''), 5000);
+    } catch (err) {
+      setErrorMsg(err.message || 'Failed to submit job application.');
+    } finally {
+      setApplyingJobId(null);
     }
   };
 
@@ -91,11 +127,24 @@ export default function JobsPortal({ user, onBack, onApply }) {
               DEVCONNECT CAREER DISCOVERY
             </span>
           </div>
-          {user && (
-            <div style={{ font: '600 13px "DM Mono", monospace', color: 'var(--job-muted)' }}>
-              Browsing as <strong style={{ color: 'var(--job-ink)' }}>{user.fullName}</strong>
-            </div>
-          )}
+
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            {user?.role === 'student' && onViewApplications && (
+              <button
+                type="button"
+                className="jobs-back-btn"
+                style={{ background: 'var(--job-teal)', color: '#fff', border: 'none' }}
+                onClick={onViewApplications}
+              >
+                My Applications ({appliedJobIds.size}) &rarr;
+              </button>
+            )}
+            {user && (
+              <div style={{ font: '600 13px "DM Mono", monospace', color: 'var(--job-muted)' }}>
+                Browsing as <strong style={{ color: 'var(--job-ink)' }}>{user.fullName}</strong>
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Hero Section */}
@@ -115,8 +164,55 @@ export default function JobsPortal({ user, onBack, onApply }) {
         />
 
         {errorMsg && (
-          <div className="alert-box alert-error" style={{ marginBottom: '20px' }}>
+          <div
+            className="alert-box alert-error"
+            style={{
+              marginBottom: '20px',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              background: '#fef2f2',
+              color: '#991b1b',
+              border: '1px solid #fecaca'
+            }}
+          >
             {errorMsg}
+          </div>
+        )}
+
+        {successMsg && (
+          <div
+            className="alert-box alert-success"
+            style={{
+              marginBottom: '20px',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              background: '#f0fdf4',
+              color: '#166534',
+              border: '1px solid #bbf7d0',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <span>{successMsg}</span>
+            {onViewApplications && (
+              <button
+                type="button"
+                style={{
+                  background: 'var(--job-teal)',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: 700,
+                  fontSize: '12px'
+                }}
+                onClick={onViewApplications}
+              >
+                Track Status &rarr;
+              </button>
+            )}
           </div>
         )}
 
@@ -222,19 +318,25 @@ export default function JobsPortal({ user, onBack, onApply }) {
                 )}
 
                 {user?.role === 'student' && (
-                  <button
-                    type="button"
-                    className="btn-apply-job"
-                    onClick={() => {
-                      if (onApply) {
-                        onApply(selectedJob);
-                      } else {
-                        alert(`Application for "${selectedJob.title}" recorded! (Milestone 4 Application Management)`);
-                      }
-                    }}
-                  >
-                    Apply for this Role &rarr;
-                  </button>
+                  appliedJobIds.has(selectedJob._id) ? (
+                    <button
+                      type="button"
+                      className="btn-apply-job"
+                      style={{ background: '#dcfce7', color: '#166534', cursor: 'default', border: '1px solid #bbf7d0' }}
+                      disabled
+                    >
+                      Applied ✓
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn-apply-job"
+                      disabled={applyingJobId === selectedJob._id}
+                      onClick={() => handleApplyClick(selectedJob)}
+                    >
+                      {applyingJobId === selectedJob._id ? 'Submitting Application...' : 'Apply for this Role \u2192'}
+                    </button>
+                  )
                 )}
               </aside>
             )}
