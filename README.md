@@ -256,6 +256,20 @@ Important Rules:
 - Follow API contracts
 - Follow database design
 
+Frontend design phase:
+
+- Member 1 designs Milestone 1 authentication UI on `feature/auth`.
+- Member 2 designs Milestone 2 student portfolio UI on `feature/recruitment`.
+- Member 3 designs Milestone 3 recruiter and jobs UI on `feature/ai`.
+- Member 4 designs Milestone 4 applications UI on `feature/admin-devops`.
+- Shared frontend files require coordination; all work enters `develop` through pull requests.
+- Final frontend integration happens after AI, notifications, and admin workflows are available.
+
+The current frontend phase covers only the completed backend Milestones 1-4.
+AI, notifications/admin, final integration, testing, Docker, deployment, and
+submission are deferred to an extended schedule after frontend design is
+complete.
+
 ---
 
 # AI Features

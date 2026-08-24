@@ -7,7 +7,7 @@ Version: 1.0
 Status: Approved
 
 Project Duration:
-10 Weeks
+10-week baseline; remaining milestones extended after frontend design
 
 Team Size:
 4 Members
@@ -65,31 +65,17 @@ Application System
 
 Week 6
 
-AI Features
+Frontend Design by Completed Milestone
 
 ↓
 
-Week 7
+After Week 6
 
-Notifications & Admin
-
-↓
-
-Week 8
-
-Frontend Integration
+Remaining milestones and final submission
 
 ↓
 
-Week 9
-
-Testing & Deployment
-
-↓
-
-Week 10
-
-Final Submission
+Extended schedule to be approved after frontend design
 
 ---
 
@@ -355,9 +341,67 @@ Weightage
 
 ---
 
-# 8. Milestone 5
+# 8. Frontend Design Phase
+
+Position
+
+Immediately after Milestone 4 and before Milestone 5
+
+Owner Mapping
+
+- Member 1: Milestone 1 authentication UI
+- Member 2: Milestone 2 student portfolio UI
+- Member 3: Milestone 3 recruiter and jobs UI
+- Member 4: Milestone 4 applications UI
+
+Branch Mapping
+
+- `feature/auth`
+- `feature/recruitment`
+- `feature/ai`
+- `feature/admin-devops`
+
+Rules
+
+- Each member edits only the frontend paths assigned in `docs/07_TEAM_OWNERSHIP.md`.
+- Shared routes, services, components, styles, and app-shell files require coordination.
+- Every slice is submitted as a pull request into `develop`.
+- No direct pushes to `develop` or `main`.
+
+Deliverables
+
+Authentication UI
+
+Student Portfolio UI
+
+Recruiter and Jobs UI
+
+Applications UI
+
+Responsive states and API integration preparation
+
+Completion Criteria
+
+Each frontend slice is reviewed, responsive, and integrated into `develop` without branch conflicts.
+
+---
+
+Schedule Extension
+
+Milestones 5 onward are deferred until the frontend design phase is complete.
+Their dates will be extended and approved in a follow-up plan. No member is
+required to begin AI, notifications/admin, final frontend integration, testing,
+Docker, deployment, or final submission during the current frontend phase.
+
+---
+
+# 9. Milestone 5
 
 AI Features
+
+Position
+
+After the Frontend Design Phase
 
 Duration
 
@@ -403,7 +447,7 @@ Weightage
 
 ---
 
-# 9. Milestone 6
+# 10. Milestone 6
 
 Notifications & Admin
 
@@ -451,9 +495,9 @@ Weightage
 
 ---
 
-# 10. Milestone 7
+# 11. Milestone 7
 
-Frontend Integration
+Final Frontend Integration
 
 Duration
 
@@ -466,6 +510,8 @@ All Members
 ---
 
 Deliverables
+
+Connect all approved frontend slices and the remaining AI, notification, admin, and deployment workflows.
 
 Authentication UI
 
@@ -499,7 +545,7 @@ Weightage
 
 ---
 
-# 11. Milestone 8
+# 12. Milestone 8
 
 Testing & Deployment
 
@@ -549,7 +595,7 @@ Weightage
 
 ---
 
-# 12. Milestone 9
+# 13. Milestone 9
 
 Final Submission
 

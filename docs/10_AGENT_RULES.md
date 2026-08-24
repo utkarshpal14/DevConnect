@@ -32,11 +32,21 @@ Agents must not introduce services, databases, frameworks, communication flows, 
 Agents must follow the path ownership matrix in `docs/07_TEAM_OWNERSHIP.md`:
 
 - Member 1: authentication and student paths.
-- Member 2: recruitment paths.
-- Member 3: `ai-service/*` plus approved AI adapter routes/controllers.
-- Member 4: admin, notification, infrastructure, documentation, and DevOps paths.
+- Member 2: recruitment backend paths and Milestone 2 student portfolio UI.
+- Member 3: `ai-service/*`, approved AI adapter routes/controllers, and Milestone 3 recruiter/jobs UI.
+- Member 4: admin, notification, infrastructure, documentation, DevOps, and Milestone 4 applications UI.
 
 Shared paths require coordination with the affected owner.
+
+Frontend ownership follows the completed milestone mapping in
+`docs/07_TEAM_OWNERSHIP.md`: Member 1 designs Milestone 1 authentication UI,
+Member 2 designs Milestone 2 portfolio UI, Member 3 designs Milestone 3
+recruiter/jobs UI, and Member 4 designs Milestone 4 applications UI.
+
+Frontend work must be committed to the owner’s existing feature branch and
+merged through a pull request into `develop`. Do not create a second branch for
+another member’s frontend slice or edit shared routing, services, components,
+or app-shell files without coordination.
 
 For the current authentication implementation, Member 1 owns
 `backend/src/modules/auth/*` and `backend/src/middlewares/*` in addition to the
