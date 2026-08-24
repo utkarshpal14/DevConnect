@@ -59,6 +59,17 @@ feature/ai
 
 feature/admin-devops
 
+Frontend milestone work stays on the existing owner branch:
+
+- `feature/auth`: Milestone 1 authentication UI
+- `feature/recruitment`: Milestone 2 student portfolio UI
+- `feature/ai`: Milestone 3 recruiter and jobs UI
+- `feature/admin-devops`: Milestone 4 applications UI
+
+No new frontend branches are created for this phase. Backend ownership and
+frontend contribution ownership are separate; each contributor uses the branch
+listed above and opens a pull request into `develop`.
+
 ---
 
 # 4. Branch Purpose
@@ -241,7 +252,28 @@ develop
 
 ---
 
-# 7. Commit Message Standard
+# 8. Frontend Branch Conflict Prevention
+
+Frontend work is divided by completed backend milestone. Each owner edits only
+their assigned page/component paths in `docs/07_TEAM_OWNERSHIP.md` and commits
+to their existing feature branch.
+
+Before starting frontend work:
+
+1. Pull the latest `develop` branch.
+2. Confirm the assigned frontend paths and API contracts.
+3. Do not edit another member’s frontend slice.
+4. Coordinate changes to shared routes, services, components, styles, and app
+	shell before editing.
+5. Submit a pull request to `develop`; never push directly to `develop` or
+	`main`.
+
+Frontend PRs must identify the milestone slice, list shared files touched, and
+include desktop and mobile screenshots or equivalent testing evidence.
+
+---
+
+# 9. Commit Message Standard
 
 Format
 

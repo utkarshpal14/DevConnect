@@ -6,7 +6,7 @@ Version: 1.0
 
 Status: Execution Plan
 
-Project Duration: 10 Weeks
+Project Duration: 10 Weeks baseline; remaining milestones extended after the frontend phase
 
 Team Size: 4 Members
 
@@ -20,6 +20,28 @@ Code Later
 
 ---
 
+# Current Schedule
+
+Weeks 1-5
+
+Backend Milestones 0-4
+
+↓
+
+Week 6
+
+Frontend Design for Completed Milestones 1-4
+
+↓
+
+After Week 6
+
+Milestones 5 onward and final submission
+
+Extended schedule to be planned and approved after the frontend phase
+
+---
+
 # Phase 0
 
 Project Foundation
@@ -27,27 +49,7 @@ Project Foundation
 Duration:
 2 Days
 
-Status:
-Mandatory
-
 ---
-
-Objective
-
-Freeze all planning documents before coding begins.
-
----
-
-Tasks
-
-Create GitHub Repository
-
-Create Documentation Structure
-
-Approve Project Scope
-
-Approve Architecture
-
 Approve Database Design
 
 Approve API Contracts
@@ -501,6 +503,73 @@ Recruiters can manage applications.
 
 # Phase 7
 
+Frontend Design by Completed Milestone
+
+Duration:
+5 Days
+
+Owners:
+Members 1, 2, 3, and 4 by assigned frontend slice
+
+---
+
+Objective
+
+Design and prepare the frontend for the completed backend milestones before
+continuing with AI, notifications, and administration work.
+
+---
+
+Ownership
+
+- Member 1: Milestone 1 authentication UI on `feature/auth`.
+- Member 2: Milestone 2 student portfolio UI on `feature/recruitment`.
+- Member 3: Milestone 3 recruiter and jobs UI on `feature/ai`.
+- Member 4: Milestone 4 applications UI on `feature/admin-devops`.
+
+---
+
+Rules
+
+- Each member modifies only their assigned frontend paths.
+- Shared routes, services, components, styles, and app-shell files require coordination.
+- Each slice is submitted through a pull request into `develop`.
+- No direct pushes to `develop` or `main`.
+
+---
+
+Tasks
+
+Create milestone-specific pages and components
+
+Connect completed backend API contracts
+
+Add loading, empty, error, success, and disabled states
+
+Verify desktop, tablet, and mobile layouts
+
+Complete visual design review
+
+---
+
+Exit Criteria
+
+All four frontend slices are reviewed and integrated into `develop` without
+ownership or branch conflicts.
+
+---
+
+Schedule Extension Rule
+
+Phases 8 onward are intentionally extended and do not start until the
+frontend design phase is complete. The team must approve dates and sequencing
+for AI, notifications/admin, final integration, testing, Docker, deployment,
+and submission after the frontend review.
+
+---
+
+# Phase 8
+
 AI Resume Parser
 
 Duration:
@@ -559,7 +628,7 @@ Resume information extracted correctly.
 
 ---
 
-# Phase 8
+# Phase 9
 
 AI Candidate Matching
 
@@ -619,7 +688,7 @@ Recruiters can view match scores.
 
 ---
 
-# Phase 9
+# Phase 10
 
 AI Skill Gap Analyzer
 
@@ -675,7 +744,7 @@ Students receive recommendations.
 
 ---
 
-# Phase 10
+# Phase 11
 
 Notification System
 
@@ -741,7 +810,7 @@ Notifications appear instantly.
 
 ---
 
-# Phase 11
+# Phase 12
 
 Admin Dashboard
 
@@ -795,7 +864,7 @@ Admin can monitor system.
 
 ---
 
-# Phase 12
+# Phase 13
 
 Redis Caching
 
@@ -847,7 +916,7 @@ Repeated requests use cache.
 
 ---
 
-# Phase 13
+# Phase 14
 
 Swagger Documentation
 
@@ -881,9 +950,9 @@ All APIs visible in Swagger.
 
 ---
 
-# Phase 14
+# Phase 15
 
-Frontend Integration
+Final Frontend Integration
 
 Duration:
 5 Days
@@ -943,7 +1012,7 @@ Frontend fully functional.
 
 ---
 
-# Phase 15
+# Phase 16
 
 System Testing
 
@@ -989,7 +1058,7 @@ Critical Bugs = 0
 
 ---
 
-# Phase 16
+# Phase 17
 
 Dockerization
 
@@ -1027,7 +1096,7 @@ Entire project runs via Docker.
 
 ---
 
-# Phase 17
+# Phase 18
 
 Deployment
 
@@ -1067,7 +1136,7 @@ Project accessible online.
 
 ---
 
-# Phase 18
+# Phase 19
 
 Final Submission
 

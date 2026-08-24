@@ -23,7 +23,6 @@ backend/src/models/User*
 backend/src/models/StudentProfile*
 backend/src/modules/auth/*
 frontend/src/pages/auth/*
-frontend/src/pages/student/*
 ```
 
 Responsibilities: user model, registration, login, JWT, role authorization, and student profiles.
@@ -38,8 +37,9 @@ backend/src/models/Job*
 backend/src/models/Application*
 backend/src/controllers/recruitment*
 backend/src/routes/recruitment*
-frontend/src/pages/recruiter/*
-frontend/src/components/jobs/*
+frontend/src/pages/student/Profile*
+frontend/src/pages/student/Dashboard*
+frontend/src/components/profile/*
 ```
 
 Responsibilities: recruiter profiles, jobs, applications, search, filtering, and pagination.
@@ -52,6 +52,9 @@ Branch: `feature/recruitment`
 ai-service/*
 backend/src/routes/ai*
 backend/src/controllers/ai*
+frontend/src/pages/recruiter/*
+frontend/src/pages/common/Jobs*
+frontend/src/components/jobs/*
 ```
 
 Responsibilities: resume parsing, candidate matching, and skill-gap analysis.
@@ -73,14 +76,33 @@ backend/src/controllers/admin*
 backend/src/routes/admin*
 backend/src/controllers/notification*
 backend/src/routes/notification*
-frontend/src/pages/admin/*
+frontend/src/pages/student/Applications*
+frontend/src/components/applications/*
 ```
 
 Responsibilities: admin, notifications, Socket.IO, Redis, Swagger, Docker, deployment, and documentation.
 
 Branch: `feature/admin-devops`
 
-# 6. Shared Paths
+# 6. Frontend Design Ownership by Completed Milestone
+
+Frontend design is delivered after backend Milestone 4 and is divided by the
+corresponding completed backend milestone. This frontend phase is the current
+work; later backend milestones are extended until this phase is complete.
+
+| Frontend slice | Owner | Branch |
+|---|---|---|
+| Milestone 1 authentication UI | Member 1 | `feature/auth` |
+| Milestone 2 student portfolio UI | Member 2 | `feature/recruitment` |
+| Milestone 3 recruiter and jobs UI | Member 3 | `feature/ai` |
+| Milestone 4 applications UI | Member 4 | `feature/admin-devops` |
+
+Each owner must keep frontend changes within the paths assigned above. The
+backend milestone owner reviews the corresponding UI PR before integration.
+Member 4 may also use `frontend/src/pages/admin/*` later for the Admin UI;
+that path is not part of the current Milestone 4 applications slice.
+
+# 7. Shared Paths
 
 ```text
 frontend/src/components/*
@@ -95,11 +117,11 @@ docs/03_API_CONTRACTS.md
 
 Changes to shared paths require coordination and must preserve the frozen API and database contracts.
 
-# 7. Git Workflow
+# 8. Git Workflow
 
 Protected branches are `main` and `develop`. Work occurs on feature branches, then moves through pull request review, `develop`, testing, and `main`. Direct pushes and self-merges are prohibited.
 
-# 8. Status
+# 9. Status
 
 Status: APPROVED
 
