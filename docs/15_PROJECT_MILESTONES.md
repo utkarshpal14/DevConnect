@@ -33,49 +33,26 @@ This serves as the official project progress tracker.
 
 # 2. Project Timeline
 
-Week 1
+Weeks 1–5 (Completed ✅)
 
-Project Planning
-
-↓
-
-Week 2
-
-Authentication & Profile Module
+Milestones 0–4: Planning, Authentication, Student Portfolio, Recruiter & Job Management, Application Management
 
 ↓
 
-Week 3
+Week 6 (Completed ✅)
 
-Recruiter Module
-
-↓
-
-Week 4
-
-Job Management
+Frontend Design Phase by Completed Milestone (Auth UI, Portfolio UI, Recruiter/Jobs UI, Applications UI)
 
 ↓
 
-Week 5
+Weeks 7–10 (Sequential Member Milestones Rotation 🚀)
 
-Application System
-
-↓
-
-Week 6
-
-Frontend Design by Completed Milestone
-
-↓
-
-After Week 6
-
-Remaining milestones and final submission
-
-↓
-
-Extended schedule to be approved after frontend design
+Each subsequent milestone is owned and driven sequentially by one member:
+- Week 7: Milestone 5 — AI Skill Gap Analyzer & Student Career Intelligence (Member 1)
+- Week 8: Milestone 6 — AI Candidate Match Scoring Engine & Recruiter Review (Member 2)
+- Week 9: Milestone 7 — Core FastAPI AI Microservice, Resume Parser & Redis Caching (Member 3)
+- Week 10: Milestone 8 — Realtime Notifications, Admin Dashboard & Multi-Container Dockerization (Member 4)
+- Week 10 (Final): Milestone 9 — Cloud Deployment, Swagger Documentation & Final Academic Submission (All Members)
 
 ---
 
@@ -386,302 +363,246 @@ Each frontend slice is reviewed, responsive, and integrated into `develop` witho
 
 ---
 
-Schedule Extension
+Schedule Extension & Execution Strategy
 
-Milestones 5 onward are deferred until the frontend design phase is complete.
-Their dates will be extended and approved in a follow-up plan. No member is
-required to begin AI, notifications/admin, final frontend integration, testing,
-Docker, deployment, or final submission during the current frontend phase.
+
+# Sequential Member Milestone Execution (Weeks 7–10)
+
+Following the completion of the Frontend Design Phase for Milestones 1–4, each subsequent milestone is assigned sequentially in rotation to one member:
+- **Milestone 5 (Week 7): Member 1** — AI Skill Gap Analyzer & Student Career Intelligence
+- **Milestone 6 (Week 8): Member 2** — AI Candidate Match Scoring Engine & Recruiter Review
+- **Milestone 7 (Week 9): Member 3** — Core FastAPI AI Microservice, Resume Parser & Redis Caching
+- **Milestone 8 (Week 10): Member 4** — Realtime Notifications, Admin Dashboard & Multi-Container Dockerization
+- **Milestone 9 (Week 10 Final): All Members** — Cloud Deployment, Swagger Documentation & Academic Submission
 
 ---
 
 # 9. Milestone 5
 
-AI Features
+AI Skill Gap Analyzer & Student Career Intelligence
 
-Position
+Position:
+Week 7 (Member 1 Milestone)
 
-After the Frontend Design Phase
+Duration:
+Week 7 (4 Days)
 
-Duration
+Owner:
+Member 1
 
-Week 6
-
-Owner
-
-Member 3
-
----
-
-Deliverables
-
-Resume Parser
-
-Candidate Matching
-
-Skill Gap Analysis
+Branch:
+`feature/auth`
 
 ---
 
-Demo
-
-Upload Resume
-
-Extract Skills
-
-Generate Match Score
-
-Generate Skill Recommendations
+Deliverables:
+- Skill Gap Analysis API endpoint (`POST /api/v1/ai/skill-gap`)
+- Role taxonomy matrix matching student skills against industry roles (Backend, Frontend, Full Stack, Data Science, DevOps)
+- Missing skills calculation and prioritized learning recommendations
+- Career Advice & Skill Gap Visualizer on Student Dashboard
+- Automated test suite in `tests/skillgap.test.js`
 
 ---
 
-Completion Criteria
-
-All AI APIs functional.
+Demo:
+Student selects target role (e.g. Backend Developer) -> receives instant skill gap breakdown, missing skill badges, and personalized learning recommendations.
 
 ---
 
-Weightage
+Completion Criteria:
+Skill Gap analysis functional, tested, and integrated into the student dashboard.
 
+---
+
+Weightage:
 15%
 
 ---
 
 # 10. Milestone 6
 
-Notifications & Admin
+AI Candidate Match Scoring Engine & Recruiter Review
 
-Duration
+Position:
+Week 8 (Member 2 Milestone)
 
-Week 7
+Duration:
+Week 8 (4 Days)
 
-Owner
+Owner:
+Member 2
 
-Member 4
-
----
-
-Deliverables
-
-Realtime Notifications
-
-Admin Dashboard
-
-Analytics APIs
-
-Audit Logs
+Branch:
+`feature/recruitment`
 
 ---
 
-Demo
-
-Application Submitted
-
-Notification Received
-
-Admin Dashboard Statistics
-
----
-
-Completion Criteria
-
-Admin module functional.
+Deliverables:
+- Candidate Match Scoring API (`POST /api/v1/ai/match-candidate`)
+- Match scoring algorithm: `(Matched Skills / Required Skills) * 100` with semantic skill normalization
+- Database persistence in `ai_match_results` collection as per approved schema
+- Recruiter Match Breakdown Drawer / Modal in Recruiter applicant review
+- Match percentage pill/badge on applicant cards in Recruiter pipeline
+- Automated test suite in `tests/matching.test.js`
 
 ---
 
-Weightage
+Demo:
+Recruiter inspects job applicants -> sees AI Match Percentage for each candidate and opens Match Breakdown drawer showing matched vs missing skills.
 
-10%
+---
+
+Completion Criteria:
+Candidate matching engine functional, persisted in MongoDB, and integrated into recruiter review view.
+
+---
+
+Weightage:
+15%
 
 ---
 
 # 11. Milestone 7
 
-Final Frontend Integration
+Core FastAPI AI Microservice, Resume Parser & Redis Caching
 
-Duration
+Position:
+Week 9 (Member 3 Milestone)
 
-Week 8
+Duration:
+Week 9 (4 Days)
 
-Owners
+Owner:
+Member 3
 
-All Members
-
----
-
-Deliverables
-
-Connect all approved frontend slices and the remaining AI, notification, admin, and deployment workflows.
-
-Authentication UI
-
-Student Dashboard
-
-Recruiter Dashboard
-
-AI Pages
-
-Admin Dashboard
+Branch:
+`feature/ai`
 
 ---
 
-Demo
-
-Complete User Journey
-
-Student → Recruiter → Admin
-
----
-
-Completion Criteria
-
-All modules connected.
+Deliverables:
+- Independent Python FastAPI microservice architecture (`ai-service/app/`)
+- Health check endpoint (`GET /api/v1/ai/health`)
+- Resume Parser API (`POST /api/v1/ai/parse-resume`): PDF text extraction (`pdfplumber` / `PyPDF2`), skills dictionary normalization, education/project extraction
+- Express backend gateway adapter forwarding resume uploads to FastAPI
+- Interactive Resume Upload Modal with preview and one-click profile auto-population
+- Redis Cloud Caching Layer (`backend/src/config/redis.js`, `backend/src/cache/`) for job listings, searches, and match results
+- Pytest test suite for FastAPI service and Jest Redis cache hit/miss tests
 
 ---
 
-Weightage
+Demo:
+Student uploads PDF developer resume -> sees live extraction preview -> auto-fills portfolio with one click. High-traffic job searches return from Redis cache in < 50ms.
 
+---
+
+Completion Criteria:
+FastAPI microservice running, resume parsing functional with frontend pre-fill, and Redis caching active.
+
+---
+
+Weightage:
 10%
 
 ---
 
 # 12. Milestone 8
 
-Testing & Deployment
+Realtime Notifications, Admin Dashboard & Multi-Container Dockerization
 
-Duration
+Position:
+Week 10 (Member 4 Milestone)
 
-Week 9
+Duration:
+Week 10 (4 Days)
 
-Owners
+Owner:
+Member 4
 
-All Members
-
----
-
-Deliverables
-
-Unit Testing
-
-API Testing
-
-Integration Testing
-
-Docker Setup
-
-Cloud Deployment
+Branch:
+`feature/admin-devops`
 
 ---
 
-Demo
-
-Live Deployment
-
-API Documentation
-
-Docker Run
-
----
-
-Completion Criteria
-
-Production-ready system.
+Deliverables:
+- Socket.IO realtime server (`backend/src/sockets/`) and event triggers (`application_submitted`, `candidate_shortlisted`, `candidate_rejected`, `job_created`)
+- Notification Mongoose model, indexing, and REST APIs (`GET /api/v1/notifications`, `PATCH /api/v1/notifications/:id/read`)
+- Interactive Notification Bell icon with live unread badge and toast alerts in student and recruiter portals
+- Admin Dashboard APIs (`/api/v1/admin/dashboard`, `/api/v1/admin/users`, enable/disable toggles)
+- System Audit Logging (`AuditLog` schema & event timeline middleware)
+- Complete Admin Dashboard UI (`frontend/src/pages/admin/`): KPI cards, user management table, audit log viewer
+- Multi-Container Dockerization: Backend, Frontend, and AI Dockerfiles + master `docker-compose.yml` linking all 5 services
 
 ---
 
-Weightage
+Demo:
+Student applies -> Recruiter receives instant realtime alert. Recruiter shortlists -> Student receives live toast notification. Admin manages users and inspects audit logs. Entire platform boots with `docker-compose up`.
 
-5%
+---
+
+Completion Criteria:
+Realtime communication operational without page reloads, Admin dashboard functional, and Docker multi-container environment verified.
+
+---
+
+Weightage:
+10%
 
 ---
 
 # 13. Milestone 9
 
-Final Submission
+Cloud Deployment, Swagger Documentation & Final Academic Submission
 
-Duration
+Position:
+Week 10 Final Wrap-up (All Members Milestone)
 
-Week 10
+Duration:
+Week 10 (Final Wrap-up & Defense)
 
-Owners
-
-All Members
-
----
-
-Deliverables
-
-Final Report
-
-Presentation
-
-Source Code
-
-Deployment URLs
-
-Demo Video
-
-Documentation
+Owners:
+All 4 Members (Equal 25% Contribution)
 
 ---
 
-Demo
-
-Complete Platform Walkthrough
-
----
-
-Completion Criteria
-
-Project submitted successfully.
-
----
-
-Weightage
-
-5%
+Deliverables:
+- Multi-Cloud Production Deployment:
+  - Frontend to Vercel (Member 1)
+  - Backend API to Render (Member 4)
+  - AI Microservice to Render (Member 3)
+  - MongoDB Atlas production cluster & Redis Cloud setup (Member 4)
+  - Cloud smoke testing and production verification (Member 2)
+- Interactive Swagger / OpenAPI Documentation at `/api/docs` covering all endpoints (All Members)
+- Comprehensive Final Project Report (PDF) with individual module chapters (All Members)
+- Complete Project Presentation Slide Deck (PPT) (All Members)
+- 5–10 minute high-definition Video Walkthrough (Member 4 Lead with All Members)
+- Git repository release tagged `v1.0.0` on `main` branch
 
 ---
 
-# 13. Team Contribution Matrix
-
-Member 1
-
-Authentication & Portfolio
-
-Expected Contribution
-
-25%
+Demo:
+Live cloud deployment walkthrough on public URLs, architecture presentation, and faculty viva defense.
 
 ---
 
-Member 2
-
-Recruitment System
-
-Expected Contribution
-
-25%
+Completion Criteria:
+Production URLs live, all documentation completed, and successful academic project defense.
 
 ---
 
-Member 3
-
-AI Features
-
-Expected Contribution
-
-25%
+Weightage:
+10%
 
 ---
 
-Member 4
+# 14. 4-Member Sequential Contribution Matrix
 
-Admin, Notifications & DevOps
-
-Expected Contribution
-
-25%
+| Team Member | Completed Foundation | Assigned Sequential Milestone | Overall Contribution |
+|---|---|---|---|
+| **Member 1** | Milestones 1 & 2 (Auth + Student Portfolio backend, 35 tests), Milestone 1 Auth UI | **Milestone 5:** AI Skill Gap Analyzer & Student Career Intelligence (`POST /api/v1/ai/skill-gap`), Student AI Dashboard UI, Vercel Deployment, Final Report & Viva | **25%** |
+| **Member 2** | Milestones 3 & 4 (Recruiter + Jobs + Applications backend, 10 tests), Milestone 2 Portfolio UI | **Milestone 6:** AI Candidate Match Scoring Engine (`POST /api/v1/ai/match-candidate`), `AIMatchResult` DB storage, Recruiter Match Breakdown UI, Smoke Testing, Final Report & Viva | **25%** |
+| **Member 3** | Milestone 3 Recruiter & Jobs UI | **Milestone 7:** Core FastAPI Microservice, AI Resume Parser Engine & UI (`POST /api/v1/ai/parse-resume`), Redis Caching Layer, AI Dockerfile, Pytest Suite, Final Report & Viva | **25%** |
+| **Member 4** | Milestone 4 Applications UI & Recruiter Review | **Milestone 8:** Realtime Socket.IO Server & Notification Bell, Admin Dashboard & APIs, Audit Logging, Docker Compose, Swagger Lead, Render Deployment, Demo Video, Final Report & Viva | **25%** |
 
 ---
 

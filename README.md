@@ -265,10 +265,13 @@ Frontend design phase:
 - Shared frontend files require coordination; all work enters `develop` through pull requests.
 - Final frontend integration happens after AI, notifications, and admin workflows are available.
 
-The current frontend phase covers only the completed backend Milestones 1-4.
-AI, notifications/admin, final integration, testing, Docker, deployment, and
-submission are deferred to an extended schedule after frontend design is
-complete.
+The completed frontend design phase covered backend Milestones 1-4.
+The remaining project phases are distributed sequentially in rotation so all 4 members contribute equally:
+- Milestone 5 (Week 7): Member 1 — AI Skill Gap Analyzer & Student Career Intelligence (`feature/auth`)
+- Milestone 6 (Week 8): Member 2 — AI Candidate Match Scoring Engine & Recruiter Review (`feature/recruitment`)
+- Milestone 7 (Week 9): Member 3 — Core FastAPI AI Microservice, Resume Parser & Redis Caching (`feature/ai`)
+- Milestone 8 (Week 10): Member 4 — Realtime Notifications, Admin Dashboard & Dockerization (`feature/admin-devops`)
+- Milestone 9 (Week 10 Final): All Members — Cloud Deployment, Swagger Documentation & Academic Submission
 
 ---
 
@@ -456,18 +459,18 @@ Mandatory:
 
 Current Phase:
 
-Milestone 1 - Authentication Implementation
+Milestones 1–4 & Frontend Design Phase Completed ✅
 
 Status:
 
-User model, registration, login, JWT authentication, role authorization, and
-the protected current-user endpoint are implemented. The authentication test
-suite still needs to be executed successfully before Milestone 1 is formally
-closed.
+Backend Milestones 1 through 4 (Authentication, Student Portfolio, Recruiter & Job
+Management, Application Management) are implemented, verified by tests (45/45 tests
+passing across 4 test suites), and merged to `develop`. The initial Frontend Design Phase
+covering all four completed milestone slices is also designed, built, and merged.
 
 Next Phase:
 
-Student Portfolio and Recruitment Modules
+Milestone 5 — AI Skill Gap Analyzer & Student Career Intelligence owned by Member 1 (`feature/auth`), followed sequentially by Milestone 6 (Member 2), Milestone 7 (Member 3), Milestone 8 (Member 4), and Milestone 9 (All Members).
 
 ---
 
