@@ -4,12 +4,13 @@ import Register from './pages/auth/Register.jsx';
 import StudentHome from './pages/student/StudentHome.jsx';
 import StudentPortfolio from './pages/student/StudentPortfolio.jsx';
 import StudentApplications from './pages/student/StudentApplications.jsx';
+import CareerAdvice from './pages/student/CareerAdvice.jsx';
 import RecruiterDashboard from './pages/recruiter/RecruiterDashboard.jsx';
 import JobsPortal from './pages/common/JobsPortal.jsx';
 import { getUser, isAuthenticated, logout } from './pages/auth/storage.js';
 
 export default function App() {
-  const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio' | 'jobs' | 'applications'
+  const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio' | 'jobs' | 'applications' | 'career'
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -35,6 +36,17 @@ export default function App() {
 
   // Student Views
   if (currentUser && currentUser.role === 'student') {
+    if (view === 'career') {
+      return (
+        <CareerAdvice
+          user={currentUser}
+          onBack={() => setView('home')}
+          onOpenPortfolio={() => setView('portfolio')}
+          onBrowseJobs={() => setView('jobs')}
+          onLogout={handleLogout}
+        />
+      );
+    }
     if (view === 'portfolio') {
       return <StudentPortfolio user={currentUser} onLogout={handleLogout} />;
     }
@@ -63,6 +75,7 @@ export default function App() {
         <StudentHome
           user={currentUser}
           onOpenPortfolio={() => setView('portfolio')}
+          onOpenCareerAdvice={() => setView('career')}
           onBrowseJobs={() => setView('jobs')}
           onViewApplications={() => setView('applications')}
           onLogout={handleLogout}

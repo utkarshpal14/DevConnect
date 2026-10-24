@@ -7,12 +7,21 @@ const quickLinks = [
   { number: '03', label: 'Career signals', detail: 'Add credentials and achievements.' }
 ];
 
-export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onViewApplications, onLogout }) {
+export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onViewApplications, onOpenCareerAdvice, onLogout }) {
   return (
     <div className="home-page">
       <header className="home-nav">
         <div className="home-brand"><span className="home-mark">D</span><span>DevConnect</span></div>
         <div className="home-account" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {onOpenCareerAdvice && (
+            <button
+              type="button"
+              style={{ background: 'var(--home-teal, #22634d)', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 700, fontSize: '13px' }}
+              onClick={onOpenCareerAdvice}
+            >
+              AI Career Intelligence ⚡
+            </button>
+          )}
           {onBrowseJobs && (
             <button
               type="button"
@@ -25,7 +34,7 @@ export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onVie
           {onViewApplications && (
             <button
               type="button"
-              style={{ background: 'var(--home-teal)', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 700, fontSize: '13px' }}
+              style={{ background: 'transparent', border: '1px solid var(--home-line)', color: 'var(--home-ink, #182022)', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 700, fontSize: '13px' }}
               onClick={onViewApplications}
             >
               My Applications
@@ -43,6 +52,16 @@ export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onVie
           <p>Welcome back, {user.fullName.split(' ')[0]}. Shape a profile that makes your skills, work, and ambition easy to find.</p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <button className="home-cta" type="button" onClick={onOpenPortfolio}>Open my portfolio <span>-&gt;</span></button>
+            {onOpenCareerAdvice && (
+              <button
+                className="home-cta"
+                type="button"
+                style={{ background: '#1e6353', color: '#fff' }}
+                onClick={onOpenCareerAdvice}
+              >
+                AI Skill Gap Analyzer <span>⚡</span>
+              </button>
+            )}
             {onBrowseJobs && (
               <button
                 className="home-cta"

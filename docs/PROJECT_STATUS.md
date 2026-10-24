@@ -67,27 +67,30 @@
 - [x] **Milestone 2 UI (Member 2 — `feature/recruitment`):** Student Home and Student Portfolio views, profile editing, PDF resume upload, skills/projects/certifications/achievements management
 - [x] **Milestone 3 UI (Member 3 — `feature/ai`):** Recruiter Dashboard, job creation modal, applicant inspection, public Jobs Portal with search and filter controls
 - [x] **Milestone 4 UI (Member 4 — `feature/admin-devops`):** Student Applications tracker with status badges & withdraw action, recruiter applicant review & pipeline status updater
-- [x] Frontend production build verified (`vite build` passes: 42 modules transformed, 0 errors)
+- [x] Frontend production build verified (`vite build` passes: 45 modules transformed, 0 errors)
 
 ---
 
-## Overall Test Suite Status ✅ (All 4 Suites Passing)
+## Overall Test Suite Status ✅ (All 5 Suites Passing)
 
 - [x] `tests/auth.test.js`: 19/19 passing
 - [x] `tests/student.test.js`: 16/16 passing
 - [x] `tests/recruitment.test.js`: 5/5 passing
 - [x] `tests/applications.test.js`: 5/5 passing
-- **Total:** 45 / 45 tests passing across all test suites
+- [x] `tests/skillgap.test.js`: 12/12 passing
+- **Total:** 57 / 57 tests passing across all test suites
 
 ---
 
-## Milestone 5 — AI Skill Gap Analyzer & Student Career Intelligence ⏳ (Member 1 — `feature/auth`)
+## Milestone 5 ✅ COMPLETED (Member 1 — `feature/auth`)
 
-- [ ] Role taxonomy matrix definition (Backend, Frontend, Full Stack, Data Science, DevOps)
-- [ ] Skill Gap Analysis API (`POST /api/v1/ai/skill-gap`)
-- [ ] Missing skills detection and prioritized learning recommendations
-- [ ] Student Career Advice & Skill Gap Visualizer UI on Student Dashboard
-- [ ] Automated skill gap unit and integration tests (`tests/skillgap.test.js`)
+### AI Skill Gap Analyzer & Student Career Intelligence
+- [x] Role taxonomy matrix definition (Backend, Frontend, Full Stack, Data Science, DevOps)
+- [x] Skill Gap Analysis API (`POST /api/v1/ai/skill-gap`) & Taxonomy Roles API (`GET /api/v1/ai/skill-gap/roles`)
+- [x] Missing skills detection, canonical skill normalization, and prioritized learning recommendations
+- [x] FastAPI microservice implementation (`ai-service/app/services/skill_gap_service.py` & `app/api/skill_gap.py`)
+- [x] Student Career Advice & Skill Gap Visualizer UI on Student Dashboard with 1-click skill addition
+- [x] Automated skill gap test suite verified (12/12 tests passing in `tests/skillgap.test.js`)
 
 ---
 
