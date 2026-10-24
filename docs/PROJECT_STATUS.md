@@ -78,30 +78,20 @@
 - [x] `tests/recruitment.test.js`: 5/5 passing
 - [x] `tests/applications.test.js`: 5/5 passing
 - [x] `tests/skillgap.test.js`: 12/12 passing
-- **Total:** 57 / 57 tests passing across all test suites
+- [x] `tests/matching.test.js`: 12/12 passing
+- **Total:** 69 / 69 tests passing across all test suites
 
 ---
 
-## Milestone 5 ✅ COMPLETED (Member 1 — `feature/auth`)
+## Milestone 6 ✅ COMPLETED (Member 2 — `feature/recruitment`)
 
-### AI Skill Gap Analyzer & Student Career Intelligence
-- [x] Role taxonomy matrix definition (Backend, Frontend, Full Stack, Data Science, DevOps)
-- [x] Skill Gap Analysis API (`POST /api/v1/ai/skill-gap`) & Taxonomy Roles API (`GET /api/v1/ai/skill-gap/roles`)
-- [x] Missing skills detection, canonical skill normalization, and prioritized learning recommendations
-- [x] FastAPI microservice implementation (`ai-service/app/services/skill_gap_service.py` & `app/api/skill_gap.py`)
-- [x] Student Career Advice & Skill Gap Visualizer UI on Student Dashboard with 1-click skill addition
-- [x] Automated skill gap test suite verified (12/12 tests passing in `tests/skillgap.test.js`)
-
----
-
-## Milestone 6 — AI Candidate Match Scoring Engine & Recruiter Review ⏳ (Member 2 — `feature/recruitment`)
-
-- [ ] Candidate Matching API (`POST /api/v1/ai/match-candidate`)
-- [ ] Scoring algorithm: `(Matched Skills / Required Skills) * 100` with semantic skill normalization
-- [ ] `AIMatchResult` Mongoose schema & database persistence
-- [ ] Recruiter Match Breakdown Drawer / Modal in applicant review pipeline
-- [ ] Match percentage pills/badges on applicant cards
-- [ ] Automated candidate matching test suite (`tests/matching.test.js`)
+### AI Candidate Match Scoring Engine & Recruiter Review
+- [x] Candidate Matching API (`POST /api/v1/ai/match-candidate`) & Job Match Results API (`GET /api/v1/ai/match-candidate/job/:jobId`)
+- [x] Scoring algorithm: `(Matched Skills / Required Skills) * 100` with semantic skill normalization & alias matching
+- [x] `AIMatchResult` Mongoose schema & database persistence in `ai_match_results` collection
+- [x] Recruiter Match Breakdown Drawer / Modal in applicant review pipeline with matched (green) & missing (red) chips
+- [x] Match percentage pills/badges on applicant cards in `JobApplicantsModal`
+- [x] Automated candidate matching test suite (12/12 tests passing in `tests/matching.test.js`)
 
 ---
 
