@@ -79,7 +79,10 @@
 - [x] `tests/applications.test.js`: 5/5 passing
 - [x] `tests/skillgap.test.js`: 12/12 passing
 - [x] `tests/matching.test.js`: 12/12 passing
-- **Total:** 69 / 69 tests passing across all test suites
+- [x] `tests/resumeParser.test.js`: 5/5 passing
+- [x] `tests/redisCache.test.js`: 7/7 passing
+- **Total Backend:** 81 / 81 tests passing across all 8 test suites
+- **AI Microservice:** 11 / 11 tests passing in Pytest (`ai-service/tests/test_resume_parser.py`)
 
 ---
 
@@ -95,14 +98,16 @@
 
 ---
 
-## Milestone 7 — Core FastAPI AI Microservice, Resume Parser & Redis Caching ⏳ (Member 3 — `feature/ai`)
+## Milestone 7 ✅ COMPLETED (Member 3 — `feature/ai`)
 
-- [ ] FastAPI microservice scaffolding (`ai-service/app/main.py`, port 8000, health checks)
-- [ ] PDF Resume Parser API (`POST /api/v1/ai/parse-resume` via `pdfplumber` / `PyPDF2`)
-- [ ] Skills extraction and normalization against `skills_dictionary.json`
-- [ ] Resume Upload Modal with extraction preview & profile auto-fill UI
-- [ ] Redis Cloud Caching Layer (`backend/src/config/redis.js`, `backend/src/cache/`)
-- [ ] FastAPI Pytest test suite & Redis cache hit/miss tests
+### Core FastAPI AI Microservice, Resume Parser & Redis Caching
+- [x] FastAPI microservice scaffolding (`ai-service/app/main.py`, port 8000, CORS, health check `GET /api/v1/ai/health`)
+- [x] PDF Resume Parser API (`POST /api/v1/ai/parse-resume` via `pypdf` / `pdfplumber`)
+- [x] Skills extraction and normalization against canonical `skills_dictionary.json`
+- [x] Interactive Resume Upload Modal with extraction preview, tag editing, and 1-click profile auto-fill UI
+- [x] Redis Cloud Caching Layer (`backend/src/config/redis.js`, `backend/src/cache/`) with cache middleware (`X-Cache: HIT/MISS`)
+- [x] Automated cache invalidation on job mutations and query acceleration (< 50ms)
+- [x] FastAPI Pytest test suite (11/11 tests passing) & Redis cache hit/miss Jest tests (7/7 tests passing)
 
 ---
 

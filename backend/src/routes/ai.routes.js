@@ -10,6 +10,8 @@ const authenticate = require('../middlewares/auth.middleware');
 const authorizeRoles = require('../middlewares/role.middleware');
 
 const CandidateMatchingController = require('../controllers/candidateMatching.controller');
+const ResumeParserController = require('../controllers/resumeParser.controller');
+const { uploadResume } = require('../middlewares/upload.middleware');
 
 // ==========================================
 // Milestone 5: Student Skill Gap Analysis
@@ -49,6 +51,19 @@ router.get(
   authenticate,
   authorizeRoles('recruiter', 'admin'),
   CandidateMatchingController.getJobMatchResults
+);
+
+// ==========================================
+// Milestone 7: AI Resume Parsing Engine
+// ==========================================
+
+// POST /api/v1/ai/parse-resume - Ingest and parse student PDF resume
+router.post(
+  '/parse-resume',
+  authenticate,
+  authorizeRoles('student', 'admin'),
+  uploadResume.single('resume'),
+  ResumeParserController.parseResume
 );
 
 module.exports = router;

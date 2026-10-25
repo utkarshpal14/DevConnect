@@ -52,6 +52,14 @@ export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onVie
           <p>Welcome back, {user.fullName.split(' ')[0]}. Shape a profile that makes your skills, work, and ambition easy to find.</p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <button className="home-cta" type="button" onClick={onOpenPortfolio}>Open my portfolio <span>-&gt;</span></button>
+            <button
+              className="home-cta"
+              type="button"
+              style={{ background: 'linear-gradient(135deg, #0284c7, #2563eb)', color: '#fff' }}
+              onClick={onOpenPortfolio}
+            >
+              AI Resume Parser <span>📄</span>
+            </button>
             {onOpenCareerAdvice && (
               <button
                 className="home-cta"
