@@ -6,6 +6,7 @@ DevConnect AI Service
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.skill_gap import router as skill_gap_router
+from app.api.resume_parser import router as resume_parser_router
 
 app = FastAPI(
     title="DevConnect AI Microservice",
@@ -33,3 +34,4 @@ def health_check():
 
 # Mount AI routers
 app.include_router(skill_gap_router)
+app.include_router(resume_parser_router)

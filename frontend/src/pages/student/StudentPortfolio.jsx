@@ -13,6 +13,7 @@ import {
   saveProfile,
   uploadResume
 } from './studentService.js';
+import ResumeUploadModal from '../../components/resume/ResumeUploadModal.jsx';
 
 const emptyProfile = {
   headline: '',
@@ -38,12 +39,17 @@ export default function StudentPortfolio({ user, onLogout }) {
   const [project, setProject] = useState({ title: '', description: '', techStack: '', githubUrl: '', liveUrl: '' });
   const [certification, setCertification] = useState({ title: '', issuer: '', issueDate: '', certificateUrl: '' });
   const [achievement, setAchievement] = useState({ title: '', description: '', achievementDate: '' });
+  const [showResumeModal, setShowResumeModal] = useState(false);
 
-  useEffect(() => {
+  const reloadProfile = () => {
     getProfile()
       .then((data) => setProfile({ ...emptyProfile, ...data, education: { ...emptyProfile.education, ...(data.education || {}) } }))
       .catch((error) => setMessage({ type: 'error', text: errorText(error) }))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    reloadProfile();
   }, []);
 
   const notify = (type, text) => setMessage({ type, text });
@@ -160,7 +166,39 @@ export default function StudentPortfolio({ user, onLogout }) {
             <div className="form-two"><label>Institution<input name="education.institution" value={profile.education?.institution || ''} onChange={handleProfileChange} placeholder="University or college" /></label><label>Degree<input name="education.degree" value={profile.education?.degree || ''} onChange={handleProfileChange} placeholder="B.Tech" /></label><label>Branch<input name="education.branch" value={profile.education?.branch || ''} onChange={handleProfileChange} placeholder="Computer Science" /></label><label>Graduation year<input type="number" name="education.graduationYear" value={profile.education?.graduationYear || ''} onChange={handleProfileChange} placeholder="2027" /></label><label>CGPA<input type="number" step="0.01" min="0" max="10" name="education.cgpa" value={profile.education?.cgpa || ''} onChange={handleProfileChange} placeholder="8.5" /></label></div>
           </form>
 
-          <aside className="panel resume-panel"><span className="eyebrow">QUICK ACTION</span><h3>Keep your resume close.</h3><p>Upload a PDF so recruiters can move from profile to proof.</p><label className="upload-button">{profile.resumeUrl ? 'Replace resume' : 'Upload resume'}<input type="file" accept=".pdf,.doc,.docx" onChange={handleResume} /></label>{profile.resumeUrl && <a className="resume-link" href={`http://localhost:5000${profile.resumeUrl}`} target="_blank" rel="noreferrer">View current resume -&gt;</a>}</aside>
+          <aside className="panel resume-panel">
+            <span className="eyebrow">QUICK ACTION</span>
+            <h3>Keep your resume close.</h3>
+            <p>Upload a PDF so recruiters can move from profile to proof.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
+              <button
+                type="button"
+                className="primary-button"
+                style={{
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  border: 'none',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  padding: '10px 16px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)'
+                }}
+                onClick={() => setShowResumeModal(true)}
+              >
+                <span>⚡ AI Resume Auto-Fill</span>
+              </button>
+              <label className="upload-button">
+                {profile.resumeUrl ? 'Replace resume' : 'Upload raw resume'}
+                <input type="file" accept=".pdf,.doc,.docx" onChange={handleResume} />
+              </label>
+            </div>
+            {profile.resumeUrl && <a className="resume-link" href={`http://localhost:5000${profile.resumeUrl}`} target="_blank" rel="noreferrer">View current resume -&gt;</a>}
+          </aside>
         </section>
 
         <section className="panel collection-panel"><div className="panel-heading"><div><span className="eyebrow">02 / TOOLKIT</span><h3>Skills</h3></div><span className="count-badge">{profile.skills?.length || 0}</span></div><form className="inline-form" onSubmit={handleAddSkill}><input value={skill} onChange={(event) => setSkill(event.target.value)} placeholder="Add a skill, e.g. React" /><button className="secondary-button">Add skill</button></form><div className="tag-list">{profile.skills?.map((item) => <span className="skill-tag" key={item}>{item}<button type="button" aria-label={`Remove ${item}`} onClick={() => updateCollection(removeSkill, item, 'skills')}>x</button></span>)}</div></section>
@@ -171,6 +209,15 @@ export default function StudentPortfolio({ user, onLogout }) {
 
         <section className="panel collection-panel"><div className="panel-heading"><div><span className="eyebrow">05 / MILESTONES</span><h3>Achievements</h3></div><span className="count-badge">{profile.achievements?.length || 0}</span></div><form className="inline-achievement" onSubmit={handleAddAchievement}><input required value={achievement.title} onChange={(event) => setAchievement({ ...achievement, title: event.target.value })} placeholder="Achievement title" /><input required value={achievement.description} onChange={(event) => setAchievement({ ...achievement, description: event.target.value })} placeholder="Short description" /><input type="date" value={achievement.achievementDate} onChange={(event) => setAchievement({ ...achievement, achievementDate: event.target.value })} /><button className="secondary-button">Add</button></form><div className="tag-list achievement-list">{profile.achievements?.map((item) => <span className="achievement-tag" key={item._id}><strong>{item.title}</strong><small>{item.description}</small><button type="button" aria-label={`Remove ${item.title}`} onClick={() => updateCollection(removeAchievement, item._id, 'achievements')}>x</button></span>)}</div></section>
       </main>
+
+      <ResumeUploadModal
+        isOpen={showResumeModal}
+        onClose={() => setShowResumeModal(false)}
+        onSuccess={(parsed) => {
+          reloadProfile();
+          notify('success', 'Resume parsed! Extracted skills and education have been synced to your profile.');
+        }}
+      />
     </div>
   );
 }
