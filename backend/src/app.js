@@ -7,6 +7,8 @@ const recruiterRoutes = require('./modules/recruiters/recruiters.routes');
 const jobsRoutes = require('./modules/jobs/jobs.routes');
 const applicationsRoutes = require('./modules/applications/applications.routes');
 const aiRoutes = require('./routes/ai.routes');
+const notificationRoutes = require('./routes/notification.routes');
+const adminRoutes = require('./routes/admin.routes');
 const errorHandler = require('./middlewares/error.middleware');
 
 const app = express();
@@ -37,6 +39,8 @@ app.use('/api/v1/recruiters', recruiterRoutes);
 app.use('/api/v1/jobs', jobsRoutes);
 app.use('/api/v1/applications', applicationsRoutes);
 app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 // Handle 404 for unmatched routes
 app.use('*', (req, res) => {

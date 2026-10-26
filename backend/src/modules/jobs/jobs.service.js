@@ -17,7 +17,27 @@ class JobsService {
 
   async createJob(userId, jobData) {
     const recruiterId = await this.getRecruiterProfileId(userId);
-    return new Job({ recruiterId, ...jobData }).save();
+    const job = await new Job({ recruiterId, ...jobData }).save();
+
+    // Trigger realtime notification & audit log for job creation (Milestone 8)
+    try {
+      const { notifyJobCreated, writeAuditLog } = require('../../sockets/notification.events');
+      await notifyJobCreated({
+        recruiterId: userId,
+        jobTitle: job.title,
+        jobId: String(job._id)
+      });
+      await writeAuditLog({
+        actorId: userId,
+        actorRole: 'recruiter',
+        action: 'job_created',
+        resource: 'Job',
+        resourceId: String(job._id),
+        details: { title: job.title, employmentType: job.employmentType }
+      });
+    } catch (_) { /* non-critical */ }
+
+    return job;
   }
 
   async listJobs({ page = 1, limit = 10, search, location, employmentType }) {

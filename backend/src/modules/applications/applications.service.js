@@ -3,6 +3,14 @@ const Application = require('../../models/Application');
 const StudentProfile = require('../../models/StudentProfile');
 const Job = require('../../models/Job');
 const RecruiterProfile = require('../../models/RecruiterProfile');
+const User = require('../../models/User');
+const {
+  notifyApplicationSubmitted,
+  notifyCandidateShortlisted,
+  notifyCandidateRejected,
+  notifyCandidateSelected,
+  writeAuditLog
+} = require('../../sockets/notification.events');
 
 class ApplicationsService {
   async getStudentProfileId(userId) {
@@ -53,7 +61,27 @@ class ApplicationsService {
       throw error;
     }
 
-    return new Application({ studentId, jobId }).save();
+    const application = await new Application({ studentId, jobId }).save();
+
+    // Notify the recruiter that a new application was submitted
+    try {
+      const fullJob = await Job.findById(jobId).populate('recruiterId').select('title recruiterId');
+      if (fullJob) {
+        const recruiterProfile = await RecruiterProfile.findById(fullJob.recruiterId).populate('userId', 'fullName');
+        const studentUser = await User.findById(userId).select('fullName');
+        if (recruiterProfile && recruiterProfile.userId && studentUser) {
+          await notifyApplicationSubmitted({
+            recruiterId: recruiterProfile.userId._id,
+            studentName: studentUser.fullName,
+            jobTitle: fullJob.title,
+            jobId: String(jobId),
+            applicationId: String(application._id)
+          });
+        }
+      }
+    } catch (_) { /* non-critical */ }
+
+    return application;
   }
 
   async withdrawApplication(userId, applicationId) {
@@ -101,6 +129,47 @@ class ApplicationsService {
     }
     application.status = status;
     await application.save();
+
+    // Fire realtime notification based on new status
+    try {
+      const fullJob = await Job.findById(application.jobId._id || application.jobId)
+        .populate('recruiterId').select('title recruiterId');
+      const recruiterProfile = fullJob
+        ? await RecruiterProfile.findById(fullJob.recruiterId).populate('userId', 'fullName')
+        : null;
+      const companyName = recruiterProfile && recruiterProfile.companyName
+        ? recruiterProfile.companyName
+        : 'the company';
+      const jobTitle = fullJob ? fullJob.title : 'the position';
+
+      // Find student's user ID from their profile
+      const studentProfile = await StudentProfile.findById(application.studentId).select('userId');
+      if (studentProfile) {
+        if (status === 'Shortlisted') {
+          await notifyCandidateShortlisted({
+            studentId: studentProfile.userId,
+            jobTitle,
+            companyName,
+            applicationId: String(application._id)
+          });
+        } else if (status === 'Rejected') {
+          await notifyCandidateRejected({
+            studentId: studentProfile.userId,
+            jobTitle,
+            companyName,
+            applicationId: String(application._id)
+          });
+        } else if (status === 'Selected') {
+          await notifyCandidateSelected({
+            studentId: studentProfile.userId,
+            jobTitle,
+            companyName,
+            applicationId: String(application._id)
+          });
+        }
+      }
+    } catch (_) { /* non-critical */ }
+
     return application;
   }
 }
