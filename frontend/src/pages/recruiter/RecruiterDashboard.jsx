@@ -3,6 +3,7 @@ import './recruiter.css';
 import CompanyProfile from './CompanyProfile.jsx';
 import JobFormModal from './JobFormModal.jsx';
 import JobApplicantsModal from '../../components/applications/JobApplicantsModal.jsx';
+import NotificationBell from '../../components/notifications/NotificationBell.jsx';
 import {
   getRecruiterProfile,
   getRecruiterJobs,
@@ -112,7 +113,8 @@ export default function RecruiterDashboard({ user, onLogout, onBrowseJobs }) {
               Welcome back, {user.fullName}. Post roles, evaluate candidate match signals, and manage recruitment pipeline.
             </p>
           </div>
-          <div className="recruiter-nav-actions">
+          <div className="recruiter-nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <NotificationBell user={user} />
             {onBrowseJobs && (
               <button
                 type="button"

@@ -1,5 +1,6 @@
 import React from 'react';
 import './home.css';
+import NotificationBell from '../../components/notifications/NotificationBell.jsx';
 
 const quickLinks = [
   { number: '01', label: 'Profile essentials', detail: 'Tell recruiters what you do best.' },
@@ -13,6 +14,7 @@ export default function StudentHome({ user, onOpenPortfolio, onBrowseJobs, onVie
       <header className="home-nav">
         <div className="home-brand"><span className="home-mark">D</span><span>DevConnect</span></div>
         <div className="home-account" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <NotificationBell user={user} />
           {onOpenCareerAdvice && (
             <button
               type="button"

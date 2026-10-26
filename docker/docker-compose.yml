@@ -1,25 +1,139 @@
+# ============================================================
+# DevConnect — Multi-Container Docker Compose
+# Milestone 8: Full-Stack Orchestration
+#
+# Services:
+#   1. backend    — Node.js/Express API + Socket.IO (port 5000)
+#   2. frontend   — React/Vite via nginx (port 80)
+#   3. ai-service — Python FastAPI microservice (port 8000)
+#   4. mongodb    — MongoDB database (port 27017)
+#   5. redis      — Redis cache (port 6379)
+#
+# Usage:
+#   docker-compose up --build
+#   docker-compose up -d (detached)
+#   docker-compose down -v (stop + remove volumes)
+# ============================================================
+
+version: '3.9'
+
+networks:
+  devconnect-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+
 services:
+  # ── MongoDB ────────────────────────────────────────────────
+  mongodb:
+    image: mongo:7
+    container_name: devconnect-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: devconnect
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - devconnect-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── Redis ──────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: devconnect-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --loglevel warning
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - devconnect-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ── Backend API ────────────────────────────────────────────
   backend:
     build:
-      context: ..
+      context: .
       dockerfile: docker/backend/Dockerfile
+    container_name: devconnect-backend
+    restart: unless-stopped
     env_file:
-      - ../backend/.env
+      - backend/.env
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/devconnect
+      - REDIS_URL=redis://redis:6379
+      - AI_SERVICE_URL=http://ai-service:8000
+      - FRONTEND_URL=http://localhost
     ports:
       - "5000:5000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - devconnect-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/api/v1/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
-  frontend:
-    build:
-      context: ..
-      dockerfile: docker/frontend/Dockerfile
-    ports:
-      - "4173:4173"
-
+  # ── AI Microservice ────────────────────────────────────────
   ai-service:
     build:
-      context: ..
+      context: .
       dockerfile: docker/ai-service/Dockerfile
+    container_name: devconnect-ai
+    restart: unless-stopped
     env_file:
-      - ../ai-service/.env
+      - ai-service/.env
+    environment:
+      - LOG_LEVEL=INFO
     ports:
       - "8000:8000"
+    networks:
+      - devconnect-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/ai/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ── Frontend ───────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    container_name: devconnect-frontend
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=http://localhost:5000
+      - VITE_SOCKET_URL=http://localhost:5000
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - devconnect-network

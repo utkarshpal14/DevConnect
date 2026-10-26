@@ -7,6 +7,7 @@ import StudentApplications from './pages/student/StudentApplications.jsx';
 import CareerAdvice from './pages/student/CareerAdvice.jsx';
 import RecruiterDashboard from './pages/recruiter/RecruiterDashboard.jsx';
 import JobsPortal from './pages/common/JobsPortal.jsx';
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
 import { getUser, isAuthenticated, logout } from './pages/auth/storage.js';
 
 export default function App() {
@@ -103,7 +104,17 @@ export default function App() {
     );
   }
 
-  // Fallback for Admin or Other Roles
+  // Admin Views
+  if (currentUser && currentUser.role === 'admin') {
+    return (
+      <AdminDashboard
+        user={currentUser}
+        onLogout={handleLogout}
+      />
+    );
+  }
+
+  // Fallback for Other Roles
   if (currentUser) {
     if (view === 'jobs') {
       return (

@@ -111,15 +111,20 @@
 
 ---
 
-## Milestone 8 — Realtime Notifications, Admin Dashboard & Multi-Container Dockerization ⏳ (Member 4 — `feature/admin-devops`)
+## Milestone 8 ✅ COMPLETED (Member 4 — `feature/admin-devops`)
 
-- [ ] Socket.IO realtime server (`backend/src/sockets/`) and event triggers
-- [ ] Notification Mongoose model, indexing, and REST APIs (`GET /api/v1/notifications`, `PATCH /api/v1/notifications/:id/read`)
-- [ ] Interactive Notification Bell icon with unread badge and toast alerts in UI
-- [ ] Admin Dashboard APIs (`/api/v1/admin/dashboard`, `/api/v1/admin/users`, enable/disable toggles)
-- [ ] System Audit Logging (`AuditLog` schema & event timeline)
-- [ ] Complete Admin Dashboard UI (`frontend/src/pages/admin/`): Metric cards & user management
-- [ ] Multi-container Dockerization: Backend, Frontend, and AI Dockerfiles + master `docker-compose.yml`
+### Realtime Notifications, Admin Dashboard & Multi-Container Dockerization
+- [x] Socket.IO realtime server (`backend/src/sockets/socket.server.js`) with per-user room joining and online tracking
+- [x] Notification event triggers (`backend/src/sockets/notification.events.js`) for all application lifecycle events
+- [x] Notification Mongoose model with indexing (`backend/src/models/Notification.js`)
+- [x] AuditLog Mongoose model with TTL index (`backend/src/models/AuditLog.js`) — auto-expires after 90 days
+- [x] Notification REST APIs (`GET /api/v1/notifications`, `GET /api/v1/notifications/unread-count`, `PATCH /api/v1/notifications/:id/read`, `PATCH /api/v1/notifications/read-all`, `DELETE /api/v1/notifications/:id`)
+- [x] Admin Dashboard APIs (`GET /api/v1/admin/dashboard`, `GET /api/v1/admin/users`, `PATCH /api/v1/admin/users/:id/toggle`, `GET /api/v1/admin/audit-logs`)
+- [x] Notification event triggers wired into `applications.service.js` (application_submitted, shortlisted, rejected, selected)
+- [x] Interactive Notification Bell UI (`frontend/src/components/notifications/NotificationBell.jsx`) with live unread badge and toast alerts
+- [x] Complete Admin Dashboard UI (`frontend/src/pages/admin/AdminDashboard.jsx`): KPI cards (users/jobs/applications/notifications), user management table with search/filter/paginate/enable-disable, audit log viewer
+- [x] Multi-Container Dockerization: Backend Dockerfile (alpine), Frontend Dockerfile (multi-stage nginx), master `docker-compose.yml` linking all 5 services (backend, frontend, ai-service, mongodb, redis) with health checks
+- [x] Milestone 8 Jest Integration Test Suite (`backend/tests/adminNotifications.test.js` — 11/11 tests passing; full backend suite 92/92 tests passing)
 
 ---
 
