@@ -173,14 +173,11 @@ DevConnect/
 
 # Team Structure
 
-## Member 1
+## Member 1 - Authentication & Student Module
 
 Module Ownership:
 
-- Authentication
-- Users
-- Student Profiles
-- Middleware
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
@@ -190,13 +187,11 @@ feature/auth
 
 ---
 
-## Member 2
+## Member 2 - Recruitment Module
 
 Module Ownership:
 
-- Recruiters
-- Jobs
-- Applications
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
@@ -206,11 +201,11 @@ feature/recruitment
 
 ---
 
-## Member 3
+## Member 3 - AI Module
 
 Module Ownership:
 
-- AI Service
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
@@ -220,15 +215,11 @@ feature/ai
 
 ---
 
-## Member 4
+## Member 4 - Admin + DevOps
 
 Module Ownership:
 
-- Notifications
-- Admin Dashboard
-- Redis
-- Docker
-- Deployment
+- Path ownership is defined in `docs/07_TEAM_OWNERSHIP.md`.
 
 Branch:
 
@@ -264,6 +255,23 @@ Important Rules:
 - Follow ownership boundaries
 - Follow API contracts
 - Follow database design
+
+Frontend design phase:
+
+- Member 1 designs Milestone 1 authentication UI on `feature/auth`.
+- Member 2 designs Milestone 2 student portfolio UI on `feature/recruitment`.
+- Member 3 designs Milestone 3 recruiter and jobs UI on `feature/ai`.
+- Member 4 designs Milestone 4 applications UI on `feature/admin-devops`.
+- Shared frontend files require coordination; all work enters `develop` through pull requests.
+- Final frontend integration happens after AI, notifications, and admin workflows are available.
+
+The completed frontend design phase covered backend Milestones 1-4.
+The remaining project phases are distributed sequentially in rotation so all 4 members contribute equally:
+- Milestone 5 (Week 7): Member 1 — AI Skill Gap Analyzer & Student Career Intelligence (`feature/auth`)
+- Milestone 6 (Week 8): Member 2 — AI Candidate Match Scoring Engine & Recruiter Review (`feature/recruitment`)
+- Milestone 7 (Week 9): Member 3 — Core FastAPI AI Microservice, Resume Parser & Redis Caching (`feature/ai`)
+- Milestone 8 (Week 10): Member 4 — Realtime Notifications, Admin Dashboard & Dockerization (`feature/admin-devops`)
+- Milestone 9 (Week 10 Final): All Members — Cloud Deployment, Swagger Documentation & Academic Submission
 
 ---
 
@@ -451,13 +459,18 @@ Mandatory:
 
 Current Phase:
 
-Planning & Documentation Complete
+Milestones 1–4 & Frontend Design Phase Completed ✅
+
+Status:
+
+Backend Milestones 1 through 4 (Authentication, Student Portfolio, Recruiter & Job
+Management, Application Management) are implemented, verified by tests (45/45 tests
+passing across 4 test suites), and merged to `develop`. The initial Frontend Design Phase
+covering all four completed milestone slices is also designed, built, and merged.
 
 Next Phase:
 
-Milestone 1
-
-Authentication & User Management
+Milestone 5 — AI Skill Gap Analyzer & Student Career Intelligence owned by Member 1 (`feature/auth`), followed sequentially by Milestone 6 (Member 2), Milestone 7 (Member 3), Milestone 8 (Member 4), and Milestone 9 (All Members).
 
 ---
 

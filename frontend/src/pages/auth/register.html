@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — DevConnect</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./auth.css" />
+</head>
+<body>
+  <div class="auth-page">
+    <main class="auth-card" role="main">
+      <!-- Brand Header -->
+      <header class="auth-brand">
+        <div class="auth-brand-icon">⚡</div>
+        <span class="auth-brand-name">DevConnect</span>
+      </header>
+
+      <h1 class="auth-title">Create an Account</h1>
+      <p class="auth-subtitle">Join the developer network and placement portal</p>
+
+      <!-- Alert Box for server-level feedback -->
+      <div id="form-alert" class="alert-box" style="display: none;" role="alert" aria-live="polite"></div>
+
+      <!-- Registration Form -->
+      <form id="register-form" class="auth-form" novalidate>
+        <!-- Full Name Field -->
+        <div class="field-group">
+          <label for="fullName" class="field-label">Full Name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              class="field-input"
+              placeholder="e.g. Alex Johnson"
+              autocomplete="name"
+              required
+            />
+          </div>
+          <span id="fullName-error" class="field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Email Field -->
+        <div class="field-group">
+          <label for="email" class="field-label">Email Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">✉</span>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="field-input"
+              placeholder="name@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+          <span id="email-error" class="field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="field-group">
+          <label class="field-label">I am joining as</label>
+          <div class="role-selector" role="radiogroup" aria-label="Account Role">
+            <div class="role-option">
+              <input type="radio" id="role-student" name="role" value="student" checked />
+              <label for="role-student" class="role-label">
+                <span class="role-icon">🎓</span>
+                <span class="role-text">Student</span>
+              </label>
+            </div>
+            <div class="role-option">
+              <input type="radio" id="role-recruiter" name="role" value="recruiter" />
+              <label for="role-recruiter" class="role-label">
+                <span class="role-icon">💼</span>
+                <span class="role-text">Recruiter</span>
+              </label>
+            </div>
+          </div>
+          <span id="role-error" class="field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Password Field -->
+        <div class="field-group">
+          <label for="password" class="field-label">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="field-input"
+              placeholder="Min. 8 chars, uppercase, number"
+              autocomplete="new-password"
+              required
+            />
+            <button
+              type="button"
+              id="toggle-password"
+              class="toggle-password"
+              aria-label="Toggle password visibility"
+            >👁</button>
+          </div>
+          <!-- Real-time Password Strength Meter -->
+          <div class="strength-bar-wrapper">
+            <div class="strength-bar-track">
+              <div id="strength-bar-fill" class="strength-bar-fill"></div>
+            </div>
+            <div id="strength-label" class="strength-label">Enter a password</div>
+          </div>
+          <span id="password-error" class="field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="field-group">
+          <label for="confirmPassword" class="field-label">Confirm Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              class="field-input"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+              required
+            />
+            <button
+              type="button"
+              id="toggle-confirm-password"
+              class="toggle-password"
+              aria-label="Toggle confirm password visibility"
+            >👁</button>
+          </div>
+          <span id="confirmPassword-error" class="field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Terms Agreement -->
+        <div class="checkbox-group">
+          <input type="checkbox" id="agree-terms" name="agree-terms" checked />
+          <label for="agree-terms">I agree to the <a href="#">Terms & Conditions</a></label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submit-btn" class="btn-submit">
+          Create Account
+        </button>
+      </form>
+
+      <!-- Footer Link to Login -->
+      <footer class="auth-footer">
+        Already have an account? <a href="./login.html">Sign in here</a>
+      </footer>
+    </main>
+  </div>
+
+  <!-- JavaScript Module Entry -->
+  <script type="module" src="./register.js"></script>
+</body>
+</html>

@@ -8,689 +8,177 @@ Status: Team Structure Freeze
 
 ---
 
-# 1. Purpose
+# 1. Ownership Rules
 
-This document defines:
+Ownership is path-based. A member may modify only the paths assigned below. Shared paths require coordination with the affected owner. `docs/02_DATABASE_DESIGN.md` and `docs/03_API_CONTRACTS.md` remain frozen contracts.
 
-- Team responsibilities
-- Module ownership
-- API ownership
-- Database ownership
-- Git branch ownership
-- Agent permissions
-- Conflict prevention rules
+# 2. Member 1 - Authentication & Student Module
 
-This document is the single source of truth for task allocation.
+```text
+backend/src/controllers/auth*
+backend/src/routes/auth*
+backend/src/middleware/*
+backend/src/middlewares/*
+backend/src/models/User*
+backend/src/models/StudentProfile*
+backend/src/modules/auth/*
+frontend/src/pages/auth/*
+```
 
----
+Responsibilities: user model, registration, login, JWT, role authorization, and student profiles.
 
-# 2. Team Structure
+Branch: `feature/auth`
 
-Total Team Members: 4
+# 3. Member 2 - Recruitment Module
 
-Team Distribution Strategy:
+```text
+backend/src/models/Recruiter*
+backend/src/models/Job*
+backend/src/models/Application*
+backend/src/controllers/recruitment*
+backend/src/routes/recruitment*
+frontend/src/pages/student/Profile*
+frontend/src/pages/student/Dashboard*
+frontend/src/components/profile/*
+```
 
-We follow MODULE OWNERSHIP.
+Responsibilities: recruiter profiles, jobs, applications, search, filtering, and pagination.
 
-We DO NOT divide work by:
+Branch: `feature/recruitment`
 
-❌ Frontend
-❌ Backend
-❌ Database
-❌ AI
+# 4. Member 3 - AI Module
 
-This creates bottlenecks.
+```text
+ai-service/*
+backend/src/routes/ai*
+backend/src/controllers/ai*
+frontend/src/pages/recruiter/*
+frontend/src/pages/common/Jobs*
+frontend/src/components/jobs/*
+```
 
-Instead we divide by BUSINESS DOMAINS.
+Responsibilities: resume parsing, candidate matching, and skill-gap analysis.
 
-Each member owns an entire module from database to frontend integration.
+Branch: `feature/ai`
 
----
+# 5. Member 4 - Admin + DevOps
 
-# 3. Member 1
+```text
+docker/*
+.github/*
+docs/*
+backend/src/config/*
+backend/src/utils/*
+backend/src/constants/*
+backend/src/sockets/*
+backend/src/cache/*
+backend/src/controllers/admin*
+backend/src/routes/admin*
+backend/src/controllers/notification*
+backend/src/routes/notification*
+frontend/src/pages/student/Applications*
+frontend/src/components/applications/*
+```
 
-Role:
+Responsibilities: admin, notifications, Socket.IO, Redis, Swagger, Docker, deployment, and documentation.
 
-Authentication & User Management Lead
+Branch: `feature/admin-devops`
 
----
+# 6. Completed Foundation & Frontend Slices
 
-Responsibilities
-
-- Registration
-- Login
-- JWT Authentication
-- Password Hashing
-- Role-Based Access Control
-- User Management
-- Security Middleware
-
----
-
-Database Ownership
-
-users
-
----
-
-API Ownership
-
-/api/v1/auth/*
-
----
-
-Folder Ownership
-
-backend/src/auth
-
-backend/src/middleware
-
-backend/src/users
-
----
-
-Allowed Actions
-
-Can:
-
-- Create auth controllers
-- Create auth services
-- Create middleware
-- Create validators
+The initial project foundation and Frontend Design Phase are completed and merged:
+- **Member 1 (`feature/auth`):** Backend Authentication (Milestone 1) & Student Portfolio (Milestone 2) + Milestone 1 Authentication UI
+- **Member 2 (`feature/recruitment`):** Backend Recruiter & Jobs (Milestone 3) & Application Pipeline (Milestone 4) + Milestone 2 Student Portfolio UI
+- **Member 3 (`feature/ai`):** Milestone 3 Recruiter & Jobs UI
+- **Member 4 (`feature/admin-devops`):** Milestone 4 Applications UI & Recruiter Review
 
 ---
 
-Cannot Modify
+# 7. Sequential Milestone Ownership for Remaining Work (Weeks 7–10)
 
-jobs
+Each subsequent milestone is owned and executed sequentially by one team member, followed by unified deployment and academic submission:
 
-applications
+### Milestone 5 — Member 1 (`feature/auth`)
+**AI Skill Gap Analyzer & Student Career Intelligence**
+- Paths:
+  - `backend/src/routes/ai.routes.js` (Skill gap endpoints)
+  - `ai-service/app/services/skill_gap_service.py`
+  - `ai-service/app/api/skill_gap.py`
+  - `frontend/src/pages/student/CareerAdvice*`
+  - `tests/skillgap.test.js`
+- Responsibilities: Role taxonomy matching, missing skills detection, prioritized learning recommendations, Student Career Advice UI, and Vercel frontend deployment.
 
-notifications
+### Milestone 6 — Member 2 (`feature/recruitment`)
+**AI Candidate Match Scoring Engine & Recruiter Review**
+- Paths:
+  - `backend/src/routes/ai.routes.js` (Candidate matching endpoints)
+  - `backend/src/models/AIMatchResult.js`
+  - `ai-service/app/services/candidate_matching_service.py`
+  - `ai-service/app/api/candidate_matcher.py`
+  - `frontend/src/components/jobs/CandidateMatchModal*`
+  - `tests/matching.test.js`
+- Responsibilities: Candidate match percentage calculation, skill comparison against job requirements, `ai_match_results` persistence, Recruiter Match Breakdown Drawer, and cloud smoke testing.
 
-admin
+### Milestone 7 — Member 3 (`feature/ai`)
+**Core FastAPI AI Microservice, Resume Parser & Redis Caching**
+- Paths:
+  - `ai-service/app/main.py`
+  - `ai-service/app/services/resume_parser_service.py`
+  - `ai-service/app/api/resume_parser.py`
+  - `backend/src/config/redis.js`
+  - `backend/src/cache/*`
+  - `frontend/src/components/profile/ResumeUploadModal*`
+  - `docker/ai-service/*`
+- Responsibilities: FastAPI application setup, PDF resume parsing with `pdfplumber`/`PyPDF2`, skills dictionary normalization, resume upload auto-population UI, Redis Cloud caching layer for high-speed queries, and AI Pytest suite.
 
-ai-service
+### Milestone 8 — Member 4 (`feature/admin-devops`)
+**Realtime Notifications, Admin Dashboard & Multi-Container Dockerization**
+- Paths:
+  - `backend/src/sockets/*` (Socket.IO realtime server & events)
+  - `backend/src/models/Notification.js` & `backend/src/models/AuditLog.js`
+  - `backend/src/controllers/admin*` & `backend/src/routes/admin*`
+  - `backend/src/controllers/notification*` & `backend/src/routes/notification*`
+  - `frontend/src/pages/admin/*`
+  - `frontend/src/components/notifications/NotificationBell*`
+  - `docker/*` (`docker-compose.yml`, backend/frontend Dockerfiles)
+- Responsibilities: Socket.IO realtime communication, notification model & APIs, live notification bell, Admin Dashboard UI & APIs, system audit logging, Docker multi-container environment, and Render backend deployment.
 
----
-
-Branch
-
-feature/auth
-
----
-
-Deliverables
-
-User Schema Integration
-
-Register API
-
-Login API
-
-JWT Middleware
-
-Role Middleware
-
-Password Security
-
-Auth Tests
-
----
-
-# 4. Member 2
-
-Role:
-
-Recruitment Module Lead
-
----
-
-Responsibilities
-
-- Job Management
-- Application Management
-- Search
-- Filtering
-- Pagination
-- Recruiter Features
-
----
-
-Database Ownership
-
-jobs
-
-applications
+### Milestone 9 — All Members (`main`)
+**Cloud Deployment, Swagger Documentation & Final Academic Submission**
+- Responsibilities:
+  - Member 1: Vercel frontend deployment, Auth/Student Swagger documentation, Final Report chapters & Viva defense
+  - Member 2: Cloud smoke testing, Recruitment Swagger documentation, Final Report chapters & Live Demo
+  - Member 3: Render AI service deployment, AI Swagger documentation, Final Report chapters & Live Demo
+  - Member 4: Render backend deployment, Atlas & Redis Cloud setup, Swagger UI Lead (`/api/docs`), Demonstration Video Walkthrough & Final Report chapters
+- Overall Contribution: Exactly 25% each across the complete project lifecycle.
 
 ---
 
-API Ownership
+# 8. Shared Paths & Coordination Rules
 
-/api/v1/jobs/*
+```text
+frontend/src/components/*
+frontend/src/services/*
+frontend/src/routes/*
+backend/src/services/*
+backend/src/repositories/*
+backend/src/validators/*
+docs/02_DATABASE_DESIGN.md
+docs/03_API_CONTRACTS.md
+```
 
-/api/v1/applications/*
-
----
-
-Folder Ownership
-
-backend/src/jobs
-
-backend/src/applications
-
-backend/src/recruiters
-
----
-
-Allowed Actions
-
-Can:
-
-- Create Job APIs
-- Create Application APIs
-- Create Recruiter APIs
-- Implement Search
+Rules:
+1. Changes to shared paths require prior coordination with affected members.
+2. The frozen API contracts (`docs/03_API_CONTRACTS.md`) and database schema (`docs/02_DATABASE_DESIGN.md`) must be strictly maintained.
+3. Every feature slice enters `develop` exclusively through an approved pull request with passing automated tests.
 
 ---
 
-Cannot Modify
-
-auth
-
-users
-
-admin
-
-notifications
-
-ai-service
-
----
-
-Branch
-
-feature/recruitment
-
----
-
-Deliverables
-
-Job CRUD
-
-Application CRUD
-
-Search APIs
-
-Pagination
-
-Filtering
-
-Recruiter Dashboard APIs
-
----
-
-# 5. Member 3
-
-Role:
-
-AI Engineering Lead
-
----
-
-Responsibilities
-
-- Resume Parsing
-- Candidate Matching
-- Skill Gap Analysis
-- FastAPI Service
-
----
-
-Database Ownership
-
-ai_match_results
-
-(Read Only Access To)
-
-student_profiles
-
-jobs
-
----
-
-API Ownership
-
-/api/v1/ai/*
-
----
-
-Folder Ownership
-
-ai-service/
-
----
-
-Allowed Actions
-
-Can:
-
-- Create AI APIs
-- Create Matching Logic
-- Create Resume Parser
-- Create AI Models
-
----
-
-Cannot Modify
-
-backend/*
-
-frontend/*
-
-database schemas
-
----
-
-Branch
-
-feature/ai
-
----
-
-Deliverables
-
-Resume Parser
-
-Candidate Matching
-
-Skill Gap Analyzer
-
-FastAPI APIs
-
-AI Testing
-
----
-
-# 6. Member 4
-
-Role:
-
-Admin, Realtime & DevOps Lead
-
----
-
-Responsibilities
-
-- Admin Module
-- Notifications
-- Socket.IO
-- Redis
-- Swagger
-- Docker
-- Deployment
-
----
-
-Database Ownership
-
-notifications
-
-audit_logs
-
----
-
-API Ownership
-
-/api/v1/admin/*
-
-/api/v1/notifications/*
-
----
-
-Folder Ownership
-
-backend/src/admin
-
-backend/src/notifications
-
-backend/src/cache
-
-backend/src/socket
-
-docker/
-
----
-
-Allowed Actions
-
-Can:
-
-- Create Admin APIs
-- Create Notification System
-- Configure Redis
-- Configure Docker
-- Configure Deployment
-
----
-
-Cannot Modify
-
-auth
-
-jobs
-
-applications
-
-ai-service
-
----
-
-Branch
-
-feature/admin-devops
-
----
-
-Deliverables
-
-Admin Dashboard
-
-Socket.IO
-
-Redis Cache
-
-Swagger Docs
-
-Docker Setup
-
-Deployment Setup
-
----
-
-# 7. Shared Ownership
-
-The following folders are shared.
-
-frontend/
-
-docs/
-
----
-
-Rules
-
-Changes require approval.
-
-Pull latest develop branch before editing.
-
----
-
-# 8. Frontend Ownership Strategy
-
-Frontend is divided by pages.
-
-Member 1
-
-Auth Pages
-
-- Login
-- Register
-
----
-
-Member 2
-
-Recruitment Pages
-
-- Jobs
-- Applications
-
----
-
-Member 3
-
-AI Pages
-
-- AI Analysis
-- Match Results
-
----
-
-Member 4
-
-Admin Pages
-
-- Dashboard
-- Analytics
-
----
-
-# 9. Git Branch Strategy
-
-Protected Branches
-
-main
-
-develop
-
----
-
-Feature Branches
-
-feature/auth
-
-feature/recruitment
-
-feature/ai
-
-feature/admin-devops
-
----
-
-Workflow
-
-feature branch
-
-↓
-
-Pull Request
-
-↓
-
-develop
-
-↓
-
-Testing
-
-↓
-
-main
-
----
-
-# 10. Pull Request Rules
-
-Before creating PR:
-
-Developer must:
-
-- Pull latest develop
-- Run project locally
-- Run tests
-- Resolve conflicts
-
----
-
-PR Description Must Include
-
-Module
-
-Changes Made
-
-Files Modified
-
-Testing Evidence
-
----
-
-# 11. Conflict Prevention Rules
-
-Rule 1
-
-One Module = One Owner
-
-Nobody edits another module.
-
----
-
-Rule 2
-
-Database Schema Frozen
-
-No changes without approval.
-
----
-
-Rule 3
-
-API Contracts Frozen
-
-No changes without approval.
-
----
-
-Rule 4
-
-Folder Structure Frozen
-
-No changes without approval.
-
----
-
-Rule 5
-
-AI Agents Cannot Cross Boundaries
-
-Agents may only edit owned modules.
-
----
-
-# 12. Agent Permissions Matrix
-
-Member 1 Agent
-
-Allowed
-
-auth
-
-users
-
-middleware
-
-Denied
-
-jobs
-
-applications
-
-admin
-
-ai-service
-
----
-
-Member 2 Agent
-
-Allowed
-
-jobs
-
-applications
-
-recruiters
-
-Denied
-
-auth
-
-admin
-
-ai-service
-
----
-
-Member 3 Agent
-
-Allowed
-
-ai-service
-
-Denied
-
-backend
-
-frontend
-
-database changes
-
----
-
-Member 4 Agent
-
-Allowed
-
-admin
-
-notifications
-
-cache
-
-docker
-
-Denied
-
-auth
-
-jobs
-
-applications
-
-ai-service
-
----
-
-# 13. Weekly Reporting
-
-Every Week Each Member Must Submit
-
-Completed Tasks
-
-Current Blockers
-
-Files Modified
-
-Next Week Plan
-
----
-
-# 14. Success Criteria
-
-Team Ownership Document is successful when:
-
-- Members work independently.
-- Git conflicts remain minimal.
-- AI agents stay within scope.
-- Contributions are clearly visible.
-- Project progresses in parallel.
-
----
-
-# 15. Status
+# 9. Status
 
 Status: APPROVED
 
-Version: 1.0
+Version: 1.2
 
-Ownership Structure: FROZEN
+Ownership State: FROZEN
+
