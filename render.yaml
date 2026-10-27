@@ -1,0 +1,51 @@
+# ============================================================
+# DevConnect — Render Infrastructure as Code Blueprint
+# Milestone 9: Multi-Cloud Production Deployment
+#
+# Deploys:
+#   1. devconnect-ai-service (Python / FastAPI)
+#   2. devconnect-backend    (Node.js / Express + Socket.IO)
+# ============================================================
+
+services:
+  # ── 1. AI Microservice (FastAPI / Python) ─────────────────
+  - type: web
+    name: devconnect-ai-service
+    runtime: python
+    rootDir: ai-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/ai/health
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  # ── 2. Backend API Server (Node.js / Express) ─────────────
+  - type: web
+    name: devconnect-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: MONGO_URI
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: AI_SERVICE_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
