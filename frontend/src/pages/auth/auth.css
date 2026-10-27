@@ -52,22 +52,24 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: var(--font-main);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+/* ── Page Wrapper ── */
+.auth-page {
+  width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-x: hidden;
+  padding: 24px 16px;
   position: relative;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+  z-index: 1;
 }
 
 /* ── Animated Background Grid ── */
-body::before {
+.auth-page::before {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   background-image:
     linear-gradient(rgba(88, 166, 255, 0.03) 1px, transparent 1px),
@@ -78,9 +80,9 @@ body::before {
 }
 
 /* Floating gradient orbs */
-body::after {
+.auth-page::after {
   content: '';
-  position: fixed;
+  position: absolute;
   width: 600px;
   height: 600px;
   border-radius: 50%;
@@ -95,18 +97,6 @@ body::after {
 @keyframes orbFloat {
   from { transform: translate(0, 0) scale(1); }
   to   { transform: translate(-30px, 30px) scale(1.1); }
-}
-
-/* ── Page Wrapper ── */
-.auth-page {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-  position: relative;
-  z-index: 1;
 }
 
 /* ── Card ── */
@@ -641,3 +631,553 @@ body::after {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   DevConnect 3D Immersive Design System (Login & Register)
+   3D Perspective, Ambient Rings, Mesh Grid & Floating Holograms
+   ============================================================ */
+
+.auth-3d-scene {
+  width: 100vw !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px 20px !important;
+  background: radial-gradient(circle at 50% 20%, #152e24 0%, #0d1b15 45%, #060d0a 100%) !important;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.auth-3d-scene::-webkit-scrollbar {
+  width: 6px;
+}
+.auth-3d-scene::-webkit-scrollbar-track {
+  background: rgba(13, 27, 21, 0.6);
+}
+.auth-3d-scene::-webkit-scrollbar-thumb {
+  background: rgba(74, 222, 128, 0.25);
+  border-radius: 4px;
+}
+.auth-3d-scene::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 222, 128, 0.45);
+}
+
+/* ── 3D Ambient Perspective Layer ── */
+.scene-ambient-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* 3D Perspective Wireframe Mesh Grid */
+.mesh-grid-3d {
+  position: absolute;
+  width: 220%;
+  height: 220%;
+  top: -60%;
+  left: -60%;
+  background-image:
+    linear-gradient(rgba(46, 125, 96, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 125, 96, 0.15) 1px, transparent 1px);
+  background-size: 55px 55px;
+  transform: rotateX(72deg) translateY(100px) translateZ(-60px);
+  transform-origin: 50% 100%;
+  mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.85) 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.85) 0%, transparent 72%);
+  animation: meshPan 20s linear infinite;
+}
+
+@keyframes meshPan {
+  0% { background-position: 0 0; }
+  100% { background-position: 55px 55px; }
+}
+
+/* Floating 3D Glowing Rings */
+.floating-ring-3d {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.floating-ring-3d.ring-1 {
+  top: 15%;
+  left: 10%;
+  width: 380px;
+  height: 380px;
+  border: 1px dashed rgba(62, 207, 142, 0.25);
+  box-shadow: 0 0 40px rgba(46, 125, 96, 0.18), inset 0 0 25px rgba(46, 125, 96, 0.12);
+  transform: rotateX(65deg) rotateY(20deg);
+  animation: spinRing 26s linear infinite;
+}
+
+.floating-ring-3d.ring-2 {
+  bottom: 10%;
+  right: 10%;
+  width: 480px;
+  height: 480px;
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  box-shadow: 0 0 50px rgba(56, 189, 248, 0.14);
+  transform: rotateX(60deg) rotateY(-25deg);
+  animation: spinRingReverse 32s linear infinite;
+}
+
+@keyframes spinRing {
+  0%   { transform: rotateX(65deg) rotateY(20deg) rotateZ(0deg); }
+  100% { transform: rotateX(65deg) rotateY(20deg) rotateZ(360deg); }
+}
+
+@keyframes spinRingReverse {
+  0%   { transform: rotateX(60deg) rotateY(-25deg) rotateZ(360deg); }
+  100% { transform: rotateX(60deg) rotateY(-25deg) rotateZ(0deg); }
+}
+
+/* Ambient Floating Glow Orbs */
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ambient-glow.glow-cyan {
+  width: 600px;
+  height: 600px;
+  top: -120px;
+  right: -120px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, transparent 70%);
+  filter: blur(65px);
+  animation: floatGlow1 12s ease-in-out infinite alternate;
+}
+
+.ambient-glow.glow-emerald {
+  width: 650px;
+  height: 650px;
+  bottom: -150px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.16) 0%, transparent 70%);
+  filter: blur(65px);
+  animation: floatGlow2 14s ease-in-out infinite alternate;
+}
+
+@keyframes floatGlow1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-40px, 35px) scale(1.15); }
+}
+
+@keyframes floatGlow2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(45px, -35px) scale(1.12); }
+}
+
+/* ── Hologram Stage & 3D Cards ── */
+.hologram-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.holo-float {
+  position: absolute;
+  pointer-events: auto;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+  z-index: 5;
+}
+
+.holo-float-left {
+  top: 50%;
+  left: calc(50% - 570px);
+  max-width: 290px;
+  transform: translateY(-55%) rotateY(16deg) rotateX(4deg);
+  animation: floatLeft 6.5s ease-in-out infinite alternate;
+}
+
+.holo-float-right {
+  top: 50%;
+  right: calc(50% - 570px);
+  max-width: 290px;
+  transform: translateY(-55%) rotateY(-16deg) rotateX(4deg);
+  animation: floatRight 7s ease-in-out infinite alternate;
+}
+
+.holo-float-bottom {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: floatBottom 5s ease-in-out infinite alternate;
+}
+
+@keyframes floatLeft {
+  0%   { transform: translateY(-55%) rotateY(16deg) rotateX(4deg) translateZ(0); }
+  100% { transform: translateY(-62%) rotateY(19deg) rotateX(6deg) translateZ(24px); }
+}
+
+@keyframes floatRight {
+  0%   { transform: translateY(-55%) rotateY(-16deg) rotateX(4deg) translateZ(0); }
+  100% { transform: translateY(-48%) rotateY(-19deg) rotateX(2deg) translateZ(24px); }
+}
+
+@keyframes floatBottom {
+  0%   { transform: translateX(-50%) translateY(0); }
+  100% { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* Hologram Card Styling */
+.holo-glass-card {
+  background: linear-gradient(135deg, rgba(16, 26, 21, 0.78) 0%, rgba(9, 16, 13, 0.88) 100%);
+  border: 1px solid rgba(126, 224, 171, 0.25);
+  border-radius: 14px;
+  padding: 18px 20px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 0.35s ease;
+}
+
+.holo-float:hover .holo-glass-card {
+  transform: scale(1.05) translateZ(30px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55), 0 0 25px rgba(62, 207, 142, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(126, 224, 171, 0.55);
+}
+
+.holo-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #7ee0ab;
+  margin-bottom: 10px;
+}
+
+.live-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+  animation: pulseGlow 1.8s infinite;
+}
+
+.live-pulse-dot.emerald {
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.85); }
+}
+
+.holo-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.holo-icon-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(46, 125, 96, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.holo-title-row h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.holo-glass-card p {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #94a3b8;
+  margin: 0 0 12px 0;
+}
+
+.holo-scan-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.holo-scan-fill {
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #34d399, transparent);
+  animation: scanLoop 2.2s infinite ease-in-out;
+}
+
+@keyframes scanLoop {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+.holo-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.holo-tag {
+  font-size: 10.5px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(46, 125, 96, 0.25);
+  border: 1px solid rgba(126, 224, 171, 0.2);
+  color: #a7f3d0;
+  font-weight: 500;
+}
+
+/* Hologram Pill (Bottom) */
+.holo-glass-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 18px;
+  border-radius: 30px;
+  background: rgba(16, 26, 21, 0.85);
+  border: 1px solid rgba(126, 224, 171, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 12px;
+  color: #cbd5e1;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.pill-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(46, 125, 96, 0.5);
+  color: #6ee7b7;
+  border: 1px solid rgba(110, 231, 183, 0.3);
+}
+
+/* ── Central 3D Auth Card ── */
+.auth-3d-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 440px;
+  margin: auto;
+  background: linear-gradient(155deg, rgba(20, 31, 26, 0.92) 0%, rgba(10, 19, 15, 0.96) 100%) !important;
+  border: 1px solid rgba(74, 222, 128, 0.24) !important;
+  border-radius: 18px !important;
+  padding: 34px 32px !important;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65), 0 0 35px rgba(34, 99, 77, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  transform-style: preserve-3d;
+}
+
+.auth-3d-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(126, 224, 171, 0.6), transparent);
+  pointer-events: none;
+}
+
+.auth-3d-scene .auth-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.auth-3d-scene .auth-brand-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #6ee7b7, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.auth-3d-scene .auth-title {
+  font-size: 23px;
+  font-weight: 800;
+  color: #f8fafc;
+  text-align: center;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.auth-3d-scene .auth-subtitle {
+  font-size: 13.5px;
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+/* 3D Scene Form Controls & Buttons */
+.auth-3d-scene .field-input:focus {
+  border-color: rgba(126, 224, 171, 0.6);
+  box-shadow: 0 0 0 3px rgba(34, 99, 77, 0.25);
+}
+
+.auth-3d-scene .role-option input[type="radio"]:checked + .role-label {
+  border-color: rgba(126, 224, 171, 0.6);
+  background: rgba(34, 99, 77, 0.25);
+  box-shadow: 0 0 12px rgba(34, 99, 77, 0.3);
+}
+
+.auth-3d-scene .btn-submit {
+  background: linear-gradient(135deg, #22634d 0%, #174e3b 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(126, 224, 171, 0.35) !important;
+  box-shadow: 0 4px 18px rgba(34, 99, 77, 0.4) !important;
+  font-weight: 700;
+}
+
+.auth-3d-scene .btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2b7a5f 0%, #1e634c 100%) !important;
+  box-shadow: 0 6px 24px rgba(34, 99, 77, 0.55), 0 0 16px rgba(126, 224, 171, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 1240px) {
+  .holo-float-left {
+    left: 16px;
+    transform: translateY(-55%) rotateY(8deg);
+  }
+  .holo-float-right {
+    right: 16px;
+    transform: translateY(-55%) rotateY(-8deg);
+  }
+  .holo-glass-card {
+    max-width: 240px;
+    padding: 14px 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hologram-stage {
+    display: none;
+  }
+}
+
+@media (max-height: 850px) {
+  .auth-3d-card {
+    padding: 24px 28px !important;
+  }
+  .auth-3d-scene .auth-brand {
+    margin-bottom: 14px;
+  }
+  .auth-3d-scene .auth-subtitle {
+    margin-bottom: 16px;
+  }
+  .auth-3d-scene .auth-form {
+    gap: 12px;
+  }
+  .holo-float-bottom {
+    display: none;
+  }
+}
+
+/* Specific Compact Refinement for Register / Signup Card */
+.auth-register-card {
+  padding: 16px 26px !important;
+  max-width: 440px !important;
+}
+
+.auth-register-card .auth-brand {
+  margin-bottom: 8px !important;
+  gap: 8px !important;
+}
+
+.auth-register-card .auth-brand-icon {
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 14px !important;
+}
+
+.auth-register-card .auth-title {
+  font-size: 19px !important;
+  margin-bottom: 2px !important;
+}
+
+.auth-register-card .auth-subtitle {
+  font-size: 12px !important;
+  margin-bottom: 10px !important;
+}
+
+.auth-register-card .auth-form {
+  gap: 7px !important;
+}
+
+.auth-register-card .field-group {
+  gap: 2px !important;
+}
+
+.auth-register-card .field-label {
+  font-size: 11.5px !important;
+}
+
+.auth-register-card .field-input {
+  padding: 7px 10px 7px 34px !important;
+  font-size: 13px !important;
+}
+
+.auth-register-card .role-selector {
+  gap: 10px !important;
+}
+
+.auth-register-card .role-label {
+  padding: 5px 8px !important;
+  gap: 3px !important;
+}
+
+.auth-register-card .role-icon {
+  font-size: 15px !important;
+}
+
+.auth-register-card .role-text {
+  font-size: 11.5px !important;
+}
+
+.auth-register-card .strength-bar-wrapper {
+  margin-top: 2px !important;
+}
+
+.auth-register-card .checkbox-group label {
+  font-size: 11.5px !important;
+}
+
+.auth-register-card .btn-submit {
+  padding: 9px !important;
+  margin-top: 3px !important;
+  font-size: 13.5px !important;
+}
+
+.auth-register-card .auth-footer {
+  margin-top: 10px !important;
+  font-size: 12px !important;
+}
+
+

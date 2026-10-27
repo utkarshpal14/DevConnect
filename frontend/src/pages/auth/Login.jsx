@@ -4,7 +4,7 @@ import { loginUser, getErrorMessage } from './authService.js';
 import { validateLoginForm, validateEmail } from './validator.js';
 import { saveToken, saveUser, getAuthData, saveFormDraft, getFormDraft, clearFormDraft } from './storage.js';
 
-export default function Login({ onNavigate, onLoginSuccess }) {
+export default function Login({ onNavigate, onLoginSuccess, onSuccess, onSwitchToRegister }) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -86,11 +86,14 @@ export default function Login({ onNavigate, onLoginSuccess }) {
 
       setAlert({ type: 'success', message: `Welcome back, ${user.fullName}! Redirecting...` });
 
+      const callback = onLoginSuccess || onSuccess;
       setTimeout(() => {
-        if (onLoginSuccess) {
-          onLoginSuccess(user);
+        if (callback) {
+          callback(user);
+        } else if (onNavigate) {
+          onNavigate('home');
         }
-      }, 1200);
+      }, 800);
 
     } catch (err) {
       const msg = getErrorMessage(err);
@@ -104,16 +107,76 @@ export default function Login({ onNavigate, onLoginSuccess }) {
   };
 
   return (
-    <div className="auth-page">
-      <main className="auth-card" role="main">
+    <div className="auth-page auth-3d-scene">
+      {/* 3D Ambient Perspective Background */}
+      <div className="scene-ambient-layer" aria-hidden="true">
+        <div className="mesh-grid-3d"></div>
+        <div className="floating-ring-3d ring-1"></div>
+        <div className="floating-ring-3d ring-2"></div>
+        <div className="ambient-glow glow-cyan"></div>
+        <div className="ambient-glow glow-emerald"></div>
+      </div>
+
+      {/* Floating 3D Holograms Describing DevConnect */}
+      <div className="hologram-stage" aria-hidden="true">
+        {/* Hologram 1: AI Resume Parser */}
+        <aside className="holo-float holo-float-left">
+          <div className="holo-glass-card">
+            <div className="holo-status">
+              <span className="live-pulse-dot"></span>
+              <span>AI ENGINE • ACTIVE</span>
+            </div>
+            <div className="holo-title-row">
+              <span className="holo-icon-badge">⚡</span>
+              <h4>AI Resume Parser</h4>
+            </div>
+            <p>One-click PDF extraction directly synchronizing verified technical skills, GitHub projects, and certifications.</p>
+            <div className="holo-scan-bar">
+              <div className="holo-scan-fill"></div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Hologram 2: Smart Candidate Matching */}
+        <aside className="holo-float holo-float-right">
+          <div className="holo-glass-card">
+            <div className="holo-status">
+              <span className="live-pulse-dot emerald"></span>
+              <span>AI MATCH ENGINE</span>
+            </div>
+            <div className="holo-title-row">
+              <span className="holo-icon-badge">🎯</span>
+              <h4>Smart Candidate Match</h4>
+            </div>
+            <p>Real-time skill-gap analysis aligns student competencies with recruiter requirements with 94%+ fit accuracy.</p>
+            <div className="holo-tags-row">
+              <span className="holo-tag">PostgreSQL</span>
+              <span className="holo-tag">FastAPI</span>
+              <span className="holo-tag">React</span>
+            </div>
+          </div>
+        </aside>
+
+        {/* Hologram 3: Bottom Signal Bar */}
+        <aside className="holo-float holo-float-bottom">
+          <div className="holo-glass-pill">
+            <span className="pill-dot">🚀</span>
+            <span>DevConnect • Verified Developer Portfolios & Campus Recruitment</span>
+            <span className="pill-badge">v2.0 LIVE</span>
+          </div>
+        </aside>
+      </div>
+
+      {/* Central 3D Glassmorphic Auth Card */}
+      <main className="auth-card auth-3d-card" role="main">
         {/* Brand Header */}
         <header className="auth-brand">
-          <div className="auth-brand-icon">⚡</div>
+          <div className="auth-brand-icon" style={{ background: '#22634d', color: '#ffffff', fontWeight: 800 }}>D</div>
           <span className="auth-brand-name">DevConnect</span>
         </header>
 
         <h1 className="auth-title">Welcome back</h1>
-        <p className="auth-subtitle">Enter your credentials to access your account</p>
+        <p className="auth-subtitle">Sign in to your developer portfolio & recruitment portal</p>
 
         {/* Form-level Alert */}
         {alert && (
@@ -207,7 +270,11 @@ export default function Login({ onNavigate, onLoginSuccess }) {
             href="#register"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('register');
+              if (onSwitchToRegister) {
+                onSwitchToRegister();
+              } else if (onNavigate) {
+                onNavigate('register');
+              }
             }}
           >
             Create one here

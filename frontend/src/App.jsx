@@ -14,50 +14,106 @@ export default function App() {
   const [view, setView] = useState('login'); // 'login' | 'register' | 'home' | 'portfolio' | 'jobs' | 'applications' | 'career'
   const [currentUser, setCurrentUser] = useState(null);
 
+  // Initialize view from URL hash if authenticated, or default to home/login
   useEffect(() => {
     if (isAuthenticated()) {
       const user = getUser();
       if (user) {
         setCurrentUser(user);
-        setView('home');
+        const hash = window.location.hash.replace('#', '');
+        const validViews = ['home', 'portfolio', 'jobs', 'applications', 'career'];
+        if (hash && validViews.includes(hash)) {
+          setView(hash);
+        } else {
+          setView('home');
+        }
+      }
+    } else {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'register') {
+        setView('register');
+      } else {
+        setView('login');
       }
     }
   }, []);
 
+  // Handle browser back and forward button navigation
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.view) {
+        setView(event.state.view);
+      } else {
+        const hash = window.location.hash.replace('#', '');
+        if (hash) {
+          setView(hash);
+        } else if (isAuthenticated()) {
+          setView('home');
+        } else {
+          setView('login');
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Safe navigation function updating view and browser history
+  const navigateTo = (targetView) => {
+    setView(targetView);
+    try {
+      if (window.location.hash !== `#${targetView}`) {
+        window.history.pushState({ view: targetView }, '', `#${targetView}`);
+      }
+    } catch (_) {}
+  };
+
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
-    setView('home');
+    navigateTo('home');
   };
 
   const handleLogout = () => {
     logout();
     setCurrentUser(null);
-    setView('login');
+    navigateTo('login');
   };
 
-  // Student Views
+  // Student Views with Two-Way Cross Navigation
   if (currentUser && currentUser.role === 'student') {
     if (view === 'career') {
       return (
         <CareerAdvice
           user={currentUser}
-          onBack={() => setView('home')}
-          onOpenPortfolio={() => setView('portfolio')}
-          onBrowseJobs={() => setView('jobs')}
+          onBack={() => navigateTo('home')}
+          onOpenPortfolio={() => navigateTo('portfolio')}
+          onBrowseJobs={() => navigateTo('jobs')}
+          onViewApplications={() => navigateTo('applications')}
           onLogout={handleLogout}
         />
       );
     }
     if (view === 'portfolio') {
-      return <StudentPortfolio user={currentUser} onLogout={handleLogout} />;
+      return (
+        <StudentPortfolio
+          user={currentUser}
+          onBack={() => navigateTo('home')}
+          onBrowseJobs={() => navigateTo('jobs')}
+          onViewApplications={() => navigateTo('applications')}
+          onOpenCareerAdvice={() => navigateTo('career')}
+          onLogout={handleLogout}
+        />
+      );
     }
     if (view === 'applications') {
       return (
         <StudentApplications
           user={currentUser}
-          onBack={() => setView('home')}
-          onBrowseJobs={() => setView('jobs')}
-          onOpenPortfolio={() => setView('portfolio')}
+          onBack={() => navigateTo('home')}
+          onBrowseJobs={() => navigateTo('jobs')}
+          onOpenPortfolio={() => navigateTo('portfolio')}
+          onOpenCareerAdvice={() => navigateTo('career')}
           onLogout={handleLogout}
         />
       );
@@ -66,23 +122,25 @@ export default function App() {
       return (
         <JobsPortal
           user={currentUser}
-          onBack={() => setView('home')}
-          onViewApplications={() => setView('applications')}
-        />
-      );
-    }
-    if (view === 'home') {
-      return (
-        <StudentHome
-          user={currentUser}
-          onOpenPortfolio={() => setView('portfolio')}
-          onOpenCareerAdvice={() => setView('career')}
-          onBrowseJobs={() => setView('jobs')}
-          onViewApplications={() => setView('applications')}
+          onBack={() => navigateTo('home')}
+          onOpenPortfolio={() => navigateTo('portfolio')}
+          onViewApplications={() => navigateTo('applications')}
+          onOpenCareerAdvice={() => navigateTo('career')}
           onLogout={handleLogout}
         />
       );
     }
+    // Default: 'home'
+    return (
+      <StudentHome
+        user={currentUser}
+        onOpenPortfolio={() => navigateTo('portfolio')}
+        onOpenCareerAdvice={() => navigateTo('career')}
+        onBrowseJobs={() => navigateTo('jobs')}
+        onViewApplications={() => navigateTo('applications')}
+        onLogout={handleLogout}
+      />
+    );
   }
 
   // Recruiter Views
@@ -91,14 +149,15 @@ export default function App() {
       return (
         <JobsPortal
           user={currentUser}
-          onBack={() => setView('home')}
+          onBack={() => navigateTo('home')}
+          onLogout={handleLogout}
         />
       );
     }
     return (
       <RecruiterDashboard
         user={currentUser}
-        onBrowseJobs={() => setView('jobs')}
+        onBrowseJobs={() => navigateTo('jobs')}
         onLogout={handleLogout}
       />
     );
@@ -106,9 +165,19 @@ export default function App() {
 
   // Admin Views
   if (currentUser && currentUser.role === 'admin') {
+    if (view === 'jobs') {
+      return (
+        <JobsPortal
+          user={currentUser}
+          onBack={() => navigateTo('home')}
+          onLogout={handleLogout}
+        />
+      );
+    }
     return (
       <AdminDashboard
         user={currentUser}
+        onBrowseJobs={() => navigateTo('jobs')}
         onLogout={handleLogout}
       />
     );
@@ -120,7 +189,8 @@ export default function App() {
       return (
         <JobsPortal
           user={currentUser}
-          onBack={() => setView('home')}
+          onBack={() => navigateTo('home')}
+          onLogout={handleLogout}
         />
       );
     }
@@ -149,52 +219,43 @@ export default function App() {
             marginBottom: '24px',
             textAlign: 'left',
             fontSize: '13px',
-            color: 'var(--text-secondary)'
+            lineHeight: '1.6'
           }}>
-            <div style={{ marginBottom: '8px' }}>
-              <span style={{ color: 'var(--text-muted)' }}>User ID: </span>
-              <code>{currentUser._id}</code>
-            </div>
-            <div style={{ marginBottom: '8px' }}>
-              <span style={{ color: 'var(--text-muted)' }}>Status: </span>
-              <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>Active Session (JWT Stored)</span>
-            </div>
+            <p style={{ margin: '0 0 8px 0', fontWeight: 'bold' }}>Session Information:</p>
+            <p style={{ margin: '0 0 4px 0' }}><strong>User ID:</strong> {currentUser._id || currentUser.id}</p>
+            <p style={{ margin: '0 0 4px 0' }}><strong>Role:</strong> {currentUser.role}</p>
+            <p style={{ margin: 0 }}><strong>Status:</strong> Active</p>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button
-              type="button"
-              className="btn-submit"
-              onClick={() => setView('jobs')}
-            >
-              Browse Jobs Portal &rarr;
-            </button>
-            <button
-              type="button"
-              className="btn-submit"
-              style={{ background: 'rgba(248, 81, 73, 0.15)', border: '1px solid var(--border-error)', color: '#ff7b72', boxShadow: 'none' }}
-              onClick={handleLogout}
-            >
-              Sign Out
-            </button>
-          </div>
+          <button
+            type="button"
+            className="auth-btn auth-btn-primary"
+            onClick={handleLogout}
+          >
+            Sign Out
+          </button>
         </main>
       </div>
     );
   }
 
+  // Unauthenticated Views
+  if (view === 'register') {
+    return (
+      <Register
+        onNavigate={navigateTo}
+        onSuccess={() => navigateTo('login')}
+        onSwitchToLogin={() => navigateTo('login')}
+      />
+    );
+  }
+
   return (
-    <div>
-      {view === 'login' ? (
-        <Login
-          onNavigate={(targetView) => setView(targetView)}
-          onLoginSuccess={handleLoginSuccess}
-        />
-      ) : (
-        <Register
-          onNavigate={(targetView) => setView(targetView)}
-        />
-      )}
-    </div>
+    <Login
+      onNavigate={navigateTo}
+      onLoginSuccess={handleLoginSuccess}
+      onSuccess={handleLoginSuccess}
+      onSwitchToRegister={() => navigateTo('register')}
+    />
   );
 }

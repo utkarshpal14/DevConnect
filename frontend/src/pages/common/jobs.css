@@ -16,14 +16,18 @@
 
 .jobs-portal {
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
   background: radial-gradient(circle at 10% 0%, #e2ece5 0, transparent 30%), var(--job-paper);
   color: var(--job-ink);
   font-family: 'Manrope', sans-serif;
-  padding: 32px clamp(16px, 4vw, 64px) 80px;
+  padding: 32px clamp(18px, 4vw, 64px) 80px;
 }
 
 .jobs-container {
   max-width: 1240px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
 }
 

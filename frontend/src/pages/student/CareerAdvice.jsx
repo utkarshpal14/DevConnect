@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './careerAdvice.css';
 import { analyzeSkillGap, addSkillToProfile } from './careerService.js';
+import NotificationBell from '../../components/notifications/NotificationBell.jsx';
 
 const AVAILABLE_ROLES = [
   'Backend Developer',
@@ -15,6 +16,7 @@ export default function CareerAdvice({
   onBack,
   onOpenPortfolio,
   onBrowseJobs,
+  onViewApplications,
   onLogout
 }) {
   const [selectedRole, setSelectedRole] = useState('Backend Developer');
@@ -101,7 +103,17 @@ export default function CareerAdvice({
             </div>
           </div>
 
-          <div className="career-nav-actions">
+          <div className="career-nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <NotificationBell user={user} />
+            {onViewApplications && (
+              <button
+                type="button"
+                className="career-nav-btn"
+                onClick={onViewApplications}
+              >
+                My Applications
+              </button>
+            )}
             {onOpenPortfolio && (
               <button
                 type="button"
