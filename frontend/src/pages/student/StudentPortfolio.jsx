@@ -353,7 +353,7 @@ export default function StudentPortfolio({ user, onBack, onBrowseJobs, onViewApp
                 <input type="file" accept=".pdf,.doc,.docx" onChange={handleResume} />
               </label>
             </div>
-            {profile.resumeUrl && <a className="resume-link" href={`http://localhost:5000${profile.resumeUrl}`} target="_blank" rel="noreferrer">View current resume -&gt;</a>}
+            {profile.resumeUrl && <a className="resume-link" href={`${(import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '')}${profile.resumeUrl}`} target="_blank" rel="noreferrer">View current resume -&gt;</a>}
           </aside>
         </section>
 

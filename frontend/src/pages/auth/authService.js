@@ -7,8 +7,9 @@
  */
 
 // ── Configuration ──
-// Base API URL — uses const (ES6)
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+// Base API URL — works dynamically on both localhost and public production servers
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+const API_BASE_URL = `${API_BASE}/api/v1`;
 
 // ── Generic Request Helper ──
 

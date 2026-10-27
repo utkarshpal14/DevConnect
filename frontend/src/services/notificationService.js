@@ -3,8 +3,8 @@
  * Milestone 8: REST API calls for notifications + Socket.IO client management
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+const SOCKET_URL = (import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
 
 function getAuthHeaders() {
   const token = localStorage.getItem('devconnect_token');
