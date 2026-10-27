@@ -14,6 +14,7 @@ import {
   uploadResume
 } from './studentService.js';
 import ResumeUploadModal from '../../components/resume/ResumeUploadModal.jsx';
+import NotificationBell from '../../components/notifications/NotificationBell.jsx';
 
 const emptyProfile = {
   headline: '',
@@ -30,7 +31,7 @@ const emptyProfile = {
 
 const errorText = (error) => error?.message || 'Something went wrong. Please try again.';
 
-export default function StudentPortfolio({ user, onLogout }) {
+export default function StudentPortfolio({ user, onBack, onBrowseJobs, onViewApplications, onOpenCareerAdvice, onLogout }) {
   const [profile, setProfile] = useState(emptyProfile);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -142,9 +143,164 @@ export default function StudentPortfolio({ user, onLogout }) {
 
   return (
     <div className="student-app">
+      {/* Top Navigation Bar with Back Button and Portal Links */}
+      <nav
+        className="student-top-nav"
+        style={{
+          maxWidth: '1240px',
+          margin: '0 auto 28px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
+          background: '#ffffff',
+          border: '1px solid var(--line, #d9ddd4)',
+          borderRadius: '8px',
+          padding: '12px 18px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              style={{
+                background: 'transparent',
+                border: '1px solid var(--line, #d9ddd4)',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                color: 'var(--green, #22634d)',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              &larr; Back to Dashboard
+            </button>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span
+              style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '5px',
+                background: 'var(--green, #22634d)',
+                color: '#fff',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: '13px'
+              }}
+            >
+              D
+            </span>
+            <span style={{ fontWeight: 800, fontSize: '14px', color: 'var(--ink, #182022)' }}>
+              DevConnect
+            </span>
+            <span
+              style={{
+                background: 'var(--mint, #c8e8d3)',
+                color: 'var(--green, #22634d)',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                fontSize: '10px',
+                fontWeight: 800
+              }}
+            >
+              PORTFOLIO
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {onOpenCareerAdvice && (
+            <button
+              type="button"
+              onClick={onOpenCareerAdvice}
+              style={{
+                background: 'rgba(34, 99, 77, 0.08)',
+                color: 'var(--green, #22634d)',
+                border: '1px solid rgba(34, 99, 77, 0.2)',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: '12px'
+              }}
+            >
+              AI Career Intelligence ⚡
+            </button>
+          )}
+          {onBrowseJobs && (
+            <button
+              type="button"
+              onClick={onBrowseJobs}
+              style={{
+                background: 'transparent',
+                border: '1px solid var(--line, #d9ddd4)',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: '12px',
+                color: 'var(--ink, #182022)'
+              }}
+            >
+              Browse Jobs &rarr;
+            </button>
+          )}
+          {onViewApplications && (
+            <button
+              type="button"
+              onClick={onViewApplications}
+              style={{
+                background: 'transparent',
+                border: '1px solid var(--line, #d9ddd4)',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: '12px',
+                color: 'var(--ink, #182022)'
+              }}
+            >
+              My Applications
+            </button>
+          )}
+          <NotificationBell user={user} />
+          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--muted, #6c7775)' }}>
+            {user.fullName}
+          </span>
+          <button
+            type="button"
+            onClick={onLogout}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--orange, #e47d42)',
+              fontWeight: 700,
+              fontSize: '13px',
+              cursor: 'pointer',
+              padding: '6px 8px'
+            }}
+          >
+            Sign out
+          </button>
+        </div>
+      </nav>
+
       <header className="student-header">
-        <div><span className="student-kicker">DEVCONNECT / PORTFOLIO</span><h1>Build your signal.</h1><p>Turn your work into a profile recruiters can remember.</p></div>
-        <div className="student-user"><span>{user.fullName}</span><button type="button" onClick={onLogout}>Sign out</button></div>
+        <div>
+          <span className="student-kicker">DEVCONNECT / PORTFOLIO</span>
+          <h1>Build your signal.</h1>
+          <p>Turn your work into a profile recruiters can remember.</p>
+        </div>
       </header>
 
       <main className="student-layout">
@@ -215,7 +371,7 @@ export default function StudentPortfolio({ user, onLogout }) {
         onClose={() => setShowResumeModal(false)}
         onSuccess={(parsed) => {
           reloadProfile();
-          notify('success', 'Resume parsed! Extracted skills and education have been synced to your profile.');
+          notify('success', 'Resume parsed! Extracted skills, education, projects, and credentials have been synced to your profile.');
         }}
       />
     </div>

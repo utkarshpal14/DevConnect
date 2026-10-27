@@ -42,11 +42,30 @@ def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
 
 
 def clean_and_normalize_text(text: str) -> str:
-    """Normalize whitespace and clean non-printable characters."""
+    """Normalize whitespace, Unicode ligatures, and clean non-printable characters."""
     if not text:
         return ""
-    # Normalize multiple line breaks and carriage returns
+    import unicodedata
+    # Normalize unicode ligatures (e.g. fi, fl) and characters
+    text = unicodedata.normalize("NFKD", text)
+    # Normalize dashes and carriage returns
+    text = text.replace("–", "-").replace("—", "-")
     text = re.sub(r"\r+", "", text)
+
+    # Check if text suffers from the word-per-line PDF artifact (e.g. \n \n between almost every word)
+    lines = [line.strip() for line in text.split("\n") if line.strip()]
+    if lines and (sum(len(line.split()) for line in lines) / len(lines)) < 2.5:
+        # Separate bullet symbols so bullets stay on newlines
+        text = re.sub(r"[●•]\s*", "\n• ", text)
+        # Protect paragraph breaks (3 or more consecutive newlines with spaces)
+        text = re.sub(r"(?:\n\s*){3,}", "<<<PARAGRAPH>>>", text)
+        # Collapse single/double newlines between words into a single space
+        text = re.sub(r"\n\s*\n", " ", text)
+        text = re.sub(r"\n", " ", text)
+        text = text.replace("<<<PARAGRAPH>>>", "\n\n")
+        # Put bullets back on clean newlines
+        text = re.sub(r"\s*•\s*", "\n• ", text)
+
     # Collapse horizontal spaces and tabs into single space
     text = re.sub(r"[ \t]+", " ", text)
     # Collapse more than 2 consecutive linebreaks
@@ -69,6 +88,20 @@ def extract_phone(text: str) -> Optional[str]:
     return match.group(0).strip() if match else None
 
 
+def extract_social_links(text: str) -> Tuple[Optional[str], Optional[str]]:
+    """Extract GitHub and LinkedIn profile URLs."""
+    gh_match = re.search(r"https?://(?:www\.)?github\.com/[a-zA-Z0-9_/-]+", text, re.IGNORECASE)
+    li_match = re.search(r"(?:https?://)?(?:www\.)?linkedin\.com/in/[a-zA-Z0-9_/-]+", text, re.IGNORECASE)
+
+    github_url = gh_match.group(0).strip() if gh_match else None
+    linkedin_url = li_match.group(0).strip() if li_match else None
+
+    if linkedin_url and not linkedin_url.startswith("http"):
+        linkedin_url = "https://" + linkedin_url
+
+    return github_url, linkedin_url
+
+
 def extract_candidate_name(text: str) -> Optional[str]:
     """Extract candidate name from the top header lines."""
     lines = [line.strip() for line in text.split("\n") if line.strip()]
@@ -76,10 +109,19 @@ def extract_candidate_name(text: str) -> Optional[str]:
         # Filter out lines containing email, URL, or phone
         if "@" in line or "http" in line or "www." in line or re.search(r"\d", line):
             continue
-        # Check if line looks like a person's name (2-4 words, alphabetic)
         words = line.split()
-        if 2 <= len(words) <= 4 and all(re.match(r"^[A-Z][a-zA-Z.'-]*$", w) for w in words):
-            return line
+        cand = []
+        for w in words:
+            if re.match(r"^[A-Z][a-zA-Z.'-]*$", w) and not re.match(
+                r"^(B\.?Tech|M\.?Tech|B\.?E|BCA|MCA|Computer|Engineering|Resume|Curriculum)$",
+                w,
+                re.IGNORECASE
+            ):
+                cand.append(w)
+            else:
+                break
+        if 2 <= len(cand) <= 4:
+            return " ".join(cand).title()
     return None
 
 
@@ -107,7 +149,7 @@ def extract_skills(text: str) -> List[str]:
 
 
 def extract_education(text: str) -> Optional[Dict[str, Any]]:
-    """Extract education details: institution, degree, field of study, graduation year."""
+    """Extract education details: institution, degree, field of study/branch, graduation year."""
     degree_patterns = [
         r"\b(B\.?Tech(?:nology)?|B\.?E\.?|Bachelor(?:\s+of\s+(?:Technology|Engineering|Science|Arts|Computer Applications))?|B\.?S\.?|BCA)\b",
         r"\b(M\.?Tech(?:nology)?|M\.?E\.?|Master(?:\s+of\s+(?:Technology|Engineering|Science|Arts|Computer Applications))?|M\.?S\.?|MCA|MBA)\b",
@@ -115,7 +157,7 @@ def extract_education(text: str) -> Optional[Dict[str, Any]]:
     ]
 
     field_patterns = [
-        r"\b(Computer Science(?: and Engineering)?|Information Technology|Data Science|Software Engineering|Electronics|Electrical Engineering|Mechanical Engineering)\b"
+        r"\b(Computer Science(?: and Engineering| Engineering)?(?:\s*\([^)]+\))?|Information Technology|Data Science|Software Engineering|Electronics|Electrical Engineering|Mechanical Engineering)\b"
     ]
 
     institution_keywords = [
@@ -143,8 +185,7 @@ def extract_education(text: str) -> Optional[Dict[str, Any]]:
         match = re.search(pattern, text)
         if match:
             cand = match.group(0).strip()
-            # Clean trailing punctuation
-            cand = re.split(r"[\n\r]", cand)[0].strip()
+            cand = re.split(r"[\n\r|]", cand)[0].strip()
             if len(cand) <= 80:
                 institution = cand
                 break
@@ -157,53 +198,71 @@ def extract_education(text: str) -> Optional[Dict[str, Any]]:
             "institution": institution,
             "degree": degree,
             "fieldOfStudy": field_of_study,
+            "branch": field_of_study,
             "graduationYear": graduation_year
         }
     return None
 
 
 def extract_projects(text: str) -> List[Dict[str, Any]]:
-    """Extract project titles and bullet points if a projects section exists."""
-    projects = []
-    # Identify project section
+    """Extract project titles, bullet points, and tech stacks."""
     proj_section_match = re.search(
         r"(?:PROJECTS|ACADEMIC PROJECTS|PERSONAL PROJECTS|KEY PROJECTS)\b(.*?)(?:EDUCATION|EXPERIENCE|CERTIFICATIONS|SKILLS|ACHIEVEMENTS|$)",
         text,
         re.IGNORECASE | re.DOTALL
     )
 
+    projects = []
     if proj_section_match:
         section_text = proj_section_match.group(1).strip()
+        section_text = re.sub(r'(\.\s*|\n)(?=([A-Z][^•\n]{3,60}?\|\s*(?:GitHub|Live|\b)))', r'\1\n', section_text)
         lines = [line.strip() for line in section_text.split("\n") if line.strip()]
         current_project = None
 
         for line in lines:
-            # Bullet point or descriptive sentence
-            if line.startswith(("-", "•", "*", ">")):
+            if line.startswith(("-", "•", "*", ">", "●")):
+                desc = line.lstrip("-•*>● ").strip()
                 if current_project:
-                    desc = line.lstrip("-•*> ").strip()
                     if current_project["description"]:
                         current_project["description"] += " " + desc
                     else:
                         current_project["description"] = desc
-            elif len(line) < 60 and not line.endswith("."):
-                # Likely a project title
-                if current_project:
-                    projects.append(current_project)
-                current_project = {
-                    "title": line,
-                    "description": "",
-                    "technologies": extract_skills(line)
-                }
+            else:
+                clean_line = line.strip()
+                if len(clean_line) >= 4:
+                    if current_project:
+                        projects.append(current_project)
+
+                    title = clean_line
+                    if "|" in clean_line:
+                        title = clean_line.split("|")[0].strip()
+
+                    techs = extract_skills(clean_line)
+                    current_project = {
+                        "title": title[:150],
+                        "description": "",
+                        "technologies": techs,
+                        "techStack": techs
+                    }
 
         if current_project:
             projects.append(current_project)
 
-    return projects[:5]
+    valid_projects = []
+    for p in projects:
+        title = p.get("title", "").strip()
+        desc = p.get("description", "").strip()
+        if len(title) >= 3 and not re.match(r"^[-–—|•]+$", title):
+            if not desc:
+                desc = f"Built and developed {title} utilizing modern engineering practices."
+            p["description"] = desc[:2000]
+            valid_projects.append(p)
+
+    return valid_projects[:5]
 
 
 def extract_certifications(text: str) -> List[str]:
-    """Extract listed certifications from resume."""
+    """Extract listed certifications from resume, splitting inline pipe items if present."""
     cert_section_match = re.search(
         r"(?:CERTIFICATIONS|LICENSES|ACCREDITATIONS)\b(.*?)(?:EDUCATION|EXPERIENCE|PROJECTS|SKILLS|ACHIEVEMENTS|$)",
         text,
@@ -215,9 +274,11 @@ def extract_certifications(text: str) -> List[str]:
         section_text = cert_section_match.group(1).strip()
         lines = [line.strip() for line in section_text.split("\n") if line.strip()]
         for line in lines:
-            cleaned = line.lstrip("-•*> 0123456789.)").strip()
-            if 4 <= len(cleaned) <= 90:
-                certifications.append(cleaned)
+            parts = [p.strip() for p in line.split("|")]
+            for part in parts:
+                cleaned = part.lstrip("-•*>● 0123456789.)").strip()
+                if 4 <= len(cleaned) <= 120 and not re.match(r"^[0-9\s.,-]+$", cleaned):
+                    certifications.append(cleaned)
 
     return certifications[:6]
 
@@ -237,6 +298,8 @@ def parse_resume_bytes(pdf_bytes: bytes, filename: str = "resume.pdf") -> Dict[s
             "email": None,
             "phone": None,
             "headline": None,
+            "githubUrl": None,
+            "linkedinUrl": None,
             "summary": "Document contains no readable text layer (may be scanned or an image).",
             "skills": [],
             "education": None,
@@ -251,6 +314,7 @@ def parse_resume_bytes(pdf_bytes: bytes, filename: str = "resume.pdf") -> Dict[s
     name = extract_candidate_name(cleaned_text)
     email = extract_email(cleaned_text)
     phone = extract_phone(cleaned_text)
+    github_url, linkedin_url = extract_social_links(cleaned_text)
 
     headline = None
     if skills:
@@ -262,6 +326,8 @@ def parse_resume_bytes(pdf_bytes: bytes, filename: str = "resume.pdf") -> Dict[s
         "email": email,
         "phone": phone,
         "headline": headline,
+        "githubUrl": github_url,
+        "linkedinUrl": linkedin_url,
         "summary": cleaned_text[:300].strip() if cleaned_text else None,
         "skills": skills,
         "education": education,

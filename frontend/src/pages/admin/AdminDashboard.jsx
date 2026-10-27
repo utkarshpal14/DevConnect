@@ -52,7 +52,7 @@ function RoleBadge({ role }) {
 }
 
 // ── Main Component ──────────────────────────────────────────
-export default function AdminDashboard({ user, onLogout }) {
+export default function AdminDashboard({ user, onBrowseJobs, onLogout }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [stats, setStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -159,6 +159,16 @@ export default function AdminDashboard({ user, onLogout }) {
         </div>
         <div className="admin-header-right">
           <NotificationBell user={user} />
+          {onBrowseJobs && (
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              style={{ fontSize: '12px', padding: '6px 12px', cursor: 'pointer' }}
+              onClick={onBrowseJobs}
+            >
+              Public Job Board &rarr;
+            </button>
+          )}
           <div className="admin-user-info">
             <span className="admin-user-name">{user.fullName}</span>
             <span className="admin-user-role">Administrator</span>

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './applications.css';
 import ApplicationCard from '../../components/applications/ApplicationCard.jsx';
 import ApplicationStatusBadge from '../../components/applications/ApplicationStatusBadge.jsx';
+import NotificationBell from '../../components/notifications/NotificationBell.jsx';
 import { getMyApplications, withdrawApplication } from './applicationService.js';
 
-export default function StudentApplications({ user, onBack, onBrowseJobs, onOpenPortfolio, onLogout }) {
+export default function StudentApplications({ user, onBack, onBrowseJobs, onOpenPortfolio, onOpenCareerAdvice, onLogout }) {
   const [applications, setApplications] = useState([]);
   const [selectedApp, setSelectedApp] = useState(null);
   const [activeTab, setActiveTab] = useState('all'); // 'all' | 'active' | 'shortlisted' | 'selected' | 'archived'
@@ -111,12 +112,23 @@ export default function StudentApplications({ user, onBack, onBrowseJobs, onOpen
             <span className="app-kicker">STUDENT CAREER TRACKER</span>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <NotificationBell user={user} />
+            {onOpenCareerAdvice && (
+              <button
+                type="button"
+                className="app-back-btn"
+                style={{ background: 'rgba(30, 99, 83, 0.1)', color: 'var(--app-teal, #1e6353)', borderColor: 'var(--app-teal, #1e6353)' }}
+                onClick={onOpenCareerAdvice}
+              >
+                AI Career Intelligence ⚡
+              </button>
+            )}
             {onBrowseJobs && (
               <button
                 type="button"
                 className="app-back-btn"
-                style={{ background: 'var(--app-teal)', color: '#fff', border: 'none' }}
+                style={{ background: 'var(--app-teal, #1e6353)', color: '#fff', border: 'none' }}
                 onClick={onBrowseJobs}
               >
                 Browse Opportunities &rarr;

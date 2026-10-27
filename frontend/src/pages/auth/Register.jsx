@@ -4,7 +4,7 @@ import { registerUser, getErrorMessage } from './authService.js';
 import { validateRegisterForm, validatePassword, getStrengthMeta } from './validator.js';
 import { clearFormDraft } from './storage.js';
 
-export default function Register({ onNavigate }) {
+export default function Register({ onNavigate, onSuccess, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -74,8 +74,12 @@ export default function Register({ onNavigate }) {
       });
 
       setTimeout(() => {
-        onNavigate('login');
-      }, 1500);
+        if (onSuccess) {
+          onSuccess();
+        } else if (onNavigate) {
+          onNavigate('login');
+        }
+      }, 1000);
 
     } catch (err) {
       const msg = getErrorMessage(err);
@@ -89,11 +93,71 @@ export default function Register({ onNavigate }) {
   };
 
   return (
-    <div className="auth-page">
-      <main className="auth-card" role="main">
+    <div className="auth-page auth-3d-scene">
+      {/* 3D Ambient Perspective Background */}
+      <div className="scene-ambient-layer" aria-hidden="true">
+        <div className="mesh-grid-3d"></div>
+        <div className="floating-ring-3d ring-1"></div>
+        <div className="floating-ring-3d ring-2"></div>
+        <div className="ambient-glow glow-cyan"></div>
+        <div className="ambient-glow glow-emerald"></div>
+      </div>
+
+      {/* Floating 3D Holograms Describing DevConnect */}
+      <div className="hologram-stage" aria-hidden="true">
+        {/* Hologram 1: Developer Portfolio & Proof */}
+        <aside className="holo-float holo-float-left">
+          <div className="holo-glass-card">
+            <div className="holo-status">
+              <span className="live-pulse-dot"></span>
+              <span>VERIFIED TALENT • REAL-TIME</span>
+            </div>
+            <div className="holo-title-row">
+              <span className="holo-icon-badge">⚡</span>
+              <h4>Smart Developer Profile</h4>
+            </div>
+            <p>Showcase verified GitHub projects, algorithmic milestones, and technical certifications directly to recruiters.</p>
+            <div className="holo-tags-row">
+              <span className="holo-tag">Git Verified</span>
+              <span className="holo-tag">Skill Badges</span>
+              <span className="holo-tag">Live Demos</span>
+            </div>
+          </div>
+        </aside>
+
+        {/* Hologram 2: Direct Recruiter Hiring */}
+        <aside className="holo-float holo-float-right">
+          <div className="holo-glass-card">
+            <div className="holo-status">
+              <span className="live-pulse-dot emerald"></span>
+              <span>CAMPUS TALENT NETWORK</span>
+            </div>
+            <div className="holo-title-row">
+              <span className="holo-icon-badge">💼</span>
+              <h4>Direct Recruiter Pipeline</h4>
+            </div>
+            <p>Skip cold applications. Direct-match recruitment connects candidates to tech leads and talent partners instantly.</p>
+            <div className="holo-scan-bar">
+              <div className="holo-scan-fill"></div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Hologram 3: Bottom Signal Bar */}
+        <aside className="holo-float holo-float-bottom">
+          <div className="holo-glass-pill">
+            <span className="pill-dot">✨</span>
+            <span>DevConnect • 100% Free for Developers & Hiring Partners</span>
+            <span className="pill-badge">JOIN NOW</span>
+          </div>
+        </aside>
+      </div>
+
+      {/* Central 3D Glassmorphic Auth Card */}
+      <main className="auth-card auth-3d-card auth-register-card" role="main">
         {/* Brand Header */}
         <header className="auth-brand">
-          <div className="auth-brand-icon">⚡</div>
+          <div className="auth-brand-icon" style={{ background: '#22634d', color: '#ffffff', fontWeight: 800 }}>D</div>
           <span className="auth-brand-name">DevConnect</span>
         </header>
 
@@ -289,7 +353,11 @@ export default function Register({ onNavigate }) {
             href="#login"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('login');
+              if (onSwitchToLogin) {
+                onSwitchToLogin();
+              } else if (onNavigate) {
+                onNavigate('login');
+              }
             }}
           >
             Sign in here

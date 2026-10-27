@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './jobs.css';
 import JobCard from '../../components/jobs/JobCard.jsx';
 import JobFilters from '../../components/jobs/JobFilters.jsx';
+import NotificationBell from '../../components/notifications/NotificationBell.jsx';
 import { getJobs, getJobById } from './jobService.js';
 import { applyForJob, getMyApplications } from '../student/applicationService.js';
 
-export default function JobsPortal({ user, onBack, onViewApplications }) {
+export default function JobsPortal({ user, onBack, onOpenPortfolio, onViewApplications, onOpenCareerAdvice, onLogout }) {
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, pages: 1 });
@@ -128,7 +129,27 @@ export default function JobsPortal({ user, onBack, onViewApplications }) {
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <NotificationBell user={user} />
+            {user?.role === 'student' && onOpenCareerAdvice && (
+              <button
+                type="button"
+                className="jobs-back-btn"
+                style={{ background: 'rgba(30, 99, 83, 0.1)', color: 'var(--job-teal)' }}
+                onClick={onOpenCareerAdvice}
+              >
+                AI Career Intelligence ⚡
+              </button>
+            )}
+            {user?.role === 'student' && onOpenPortfolio && (
+              <button
+                type="button"
+                className="jobs-back-btn"
+                onClick={onOpenPortfolio}
+              >
+                My Portfolio
+              </button>
+            )}
             {user?.role === 'student' && onViewApplications && (
               <button
                 type="button"
@@ -141,8 +162,18 @@ export default function JobsPortal({ user, onBack, onViewApplications }) {
             )}
             {user && (
               <div style={{ font: '600 13px "DM Mono", monospace', color: 'var(--job-muted)' }}>
-                Browsing as <strong style={{ color: 'var(--job-ink)' }}>{user.fullName}</strong>
+                <strong style={{ color: 'var(--job-ink)' }}>{user.fullName}</strong>
               </div>
+            )}
+            {onLogout && (
+              <button
+                type="button"
+                className="jobs-back-btn"
+                style={{ borderColor: 'rgba(219, 111, 56, 0.4)', color: 'var(--job-coral, #db6f38)' }}
+                onClick={onLogout}
+              >
+                Sign out
+              </button>
             )}
           </div>
         </header>

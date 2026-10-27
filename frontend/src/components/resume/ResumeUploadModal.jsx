@@ -1,6 +1,12 @@
 import React, { useState, useRef } from 'react';
 import './resumeUpload.css';
-import { parseResume, addSkillToProfile, updateStudentProfile } from '../../services/resumeService.js';
+import {
+  parseResume,
+  addSkillToProfile,
+  updateStudentProfile,
+  addProjectToProfile,
+  addCertificationToProfile
+} from '../../services/resumeService.js';
 
 export default function ResumeUploadModal({
   isOpen = false,
@@ -115,16 +121,71 @@ export default function ResumeUploadModal({
         }
       }
 
-      // 2. Optionally sync headline or education if present
-      if (parsedData.headline || parsedData.education) {
-        const profilePayload = {};
-        if (parsedData.headline) profilePayload.headline = parsedData.headline;
-        if (parsedData.education) profilePayload.education = parsedData.education;
+      // 2. Sync profile details: headline, education (with branch), and social links
+      const profilePayload = {};
+      if (parsedData.headline) profilePayload.headline = parsedData.headline;
+      if (parsedData.githubUrl) profilePayload.githubUrl = parsedData.githubUrl;
+      if (parsedData.linkedinUrl) profilePayload.linkedinUrl = parsedData.linkedinUrl;
 
+      if (parsedData.education) {
+        profilePayload.education = {
+          institution: parsedData.education.institution || '',
+          degree: parsedData.education.degree || '',
+          branch: parsedData.education.branch || parsedData.education.fieldOfStudy || '',
+          graduationYear: parsedData.education.graduationYear ? Number(parsedData.education.graduationYear) : undefined
+        };
+      }
+
+      if (Object.keys(profilePayload).length > 0) {
+        setSyncStatus('Updating profile and education details...');
         try {
           await updateStudentProfile(profilePayload);
         } catch {
           // Non-blocking
+        }
+      }
+
+      // 3. Sync detected projects
+      if (Array.isArray(parsedData.projects) && parsedData.projects.length > 0) {
+        setSyncStatus('Adding detected projects to portfolio...');
+        for (const proj of parsedData.projects) {
+          if (proj.title && proj.description) {
+            try {
+              await addProjectToProfile({
+                title: proj.title,
+                description: proj.description,
+                techStack: Array.isArray(proj.techStack) && proj.techStack.length > 0
+                  ? proj.techStack
+                  : (Array.isArray(proj.technologies) ? proj.technologies : [])
+              });
+            } catch {
+              // Ignore individual project error
+            }
+          }
+        }
+      }
+
+      // 4. Sync detected certifications
+      if (Array.isArray(parsedData.certifications) && parsedData.certifications.length > 0) {
+        setSyncStatus('Adding certifications...');
+        for (const cert of parsedData.certifications) {
+          const certTitle = typeof cert === 'string' ? cert : cert.title;
+          if (certTitle) {
+            let issuer = 'Certification Authority';
+            if (/azure|microsoft/i.test(certTitle)) issuer = 'Microsoft';
+            else if (/aws|amazon/i.test(certTitle)) issuer = 'Amazon Web Services';
+            else if (/google/i.test(certTitle)) issuer = 'Google';
+            else if (/cisco/i.test(certTitle)) issuer = 'Cisco';
+
+            try {
+              await addCertificationToProfile({
+                title: certTitle,
+                issuer: (typeof cert === 'object' && cert.issuer) ? cert.issuer : issuer
+              });
+            } catch {
+              // Ignore individual cert error
+            }
+          }
         }
       }
 
@@ -352,6 +413,22 @@ export default function ResumeUploadModal({
                             {proj.description}
                           </div>
                         )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Certifications Summary */}
+              {Array.isArray(parsedData.certifications) && parsedData.certifications.length > 0 && (
+                <div className="resume-review-section">
+                  <div className="resume-review-heading">
+                    <span>Detected Certifications ({parsedData.certifications.length})</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {parsedData.certifications.map((cert, idx) => (
+                      <div key={idx} className="resume-review-card" style={{ padding: '10px 14px', fontSize: '13px', fontWeight: 500, color: '#0f172a' }}>
+                        🏅 {typeof cert === 'string' ? cert : cert.title}
                       </div>
                     ))}
                   </div>

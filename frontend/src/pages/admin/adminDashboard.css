@@ -7,6 +7,8 @@
 /* ── Page Layout ─────────────────────────────────────────── */
 .admin-page {
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
   background: #0d1117;
   color: #e6edf3;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -141,8 +143,8 @@
 /* ── Content Area ─────────────────────────────────────────── */
 .admin-content {
   flex: 1;
-  padding: 28px 24px;
-  max-width: 1200px;
+  padding: 28px clamp(18px, 4vw, 64px) 60px;
+  max-width: 1240px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;

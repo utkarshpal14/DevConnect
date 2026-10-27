@@ -46,34 +46,39 @@ class ResumeParserService {
         signal: AbortSignal.timeout(10000) // 10s timeout per spec
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        const errorMsg = data.detail || data.message || `AI Microservice error (${response.status})`;
-        const error = new Error(errorMsg);
-        error.statusCode = response.status >= 500 ? 502 : response.status;
-        throw error;
-      }
-
-      return data.data;
-    } catch (err) {
-      // If FastAPI service is unreachable or offline
-      if (err.name === 'TimeoutError' || err.code === 'ECONNREFUSED' || err.message.includes('fetch failed')) {
-        // Return a clean fallback structure rather than crashing the gateway
+        console.warn(`[ResumeParserGateway] AI service returned status ${response.status}. Using fallback parser.`);
         return {
           name: null,
           email: null,
           phone: null,
           headline: 'Aspiring Software Engineer',
-          summary: 'Resume received. AI microservice is currently running in background synchronization mode.',
+          summary: 'Resume received. Basic profile ingestion completed.',
           skills: [],
           education: null,
           projects: [],
           certifications: [],
-          serviceNotice: 'FastAPI microservice was unreachable; basic ingestion completed.'
+          serviceNotice: `AI microservice returned status ${response.status}; basic ingestion completed.`
         };
       }
-      throw err;
+
+      const data = await response.json();
+      return data.data;
+    } catch (err) {
+      // If FastAPI service is unreachable, offline, or returns an error
+      console.warn(`[ResumeParserGateway] AI service unreachable (${err.message}). Using fallback parser.`);
+      return {
+        name: null,
+        email: null,
+        phone: null,
+        headline: 'Aspiring Software Engineer',
+        summary: 'Resume received. AI microservice is currently running in background synchronization mode.',
+        skills: [],
+        education: null,
+        projects: [],
+        certifications: [],
+        serviceNotice: 'FastAPI microservice was unreachable; basic ingestion completed.'
+      };
     }
   }
 }
