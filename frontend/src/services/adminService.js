@@ -3,7 +3,7 @@
  * Milestone 8: Admin Dashboard REST API calls
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
 
 function getAuthHeaders() {
   const token = localStorage.getItem('devconnect_token');
