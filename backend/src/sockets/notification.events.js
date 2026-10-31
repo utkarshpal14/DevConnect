@@ -2,16 +2,19 @@
  * Notification Event Triggers
  * Milestone 8: Realtime Notifications
  *
- * Creates DB notification records AND emits Socket.IO realtime events
- * for every significant application lifecycle action.
+ * Creates DB notification records, emits Socket.IO realtime events,
+ * and dispatches email notifications for application lifecycle actions.
  */
 
 const Notification = require('../models/Notification');
 const AuditLog = require('../models/AuditLog');
+const User = require('../models/User');
 const { emitNotification } = require('./socket.server');
+const emailService = require('../services/email.service');
+const config = require('../config/env');
 
 /**
- * Create a Notification document and emit it to the recipient in real-time.
+ * Create a Notification document, emit it in real-time, and send an email notification.
  * @param {object} params
  * @param {string} params.recipientId
  * @param {string} params.type
@@ -39,6 +42,26 @@ async function createAndEmitNotification({ recipientId, type, title, message, me
       metadata: notification.metadata,
       createdAt: notification.createdAt
     });
+
+    // Send email notification in background (fire-and-forget, non-blocking)
+    if (config.nodeEnv !== 'test') {
+      User.findById(recipientId)
+        .select('email fullName')
+        .then((recipient) => {
+          if (recipient && recipient.email) {
+            emailService.sendNotificationEmail({
+              to: recipient.email,
+              fullName: recipient.fullName,
+              title,
+              message,
+              linkUrl: config.frontendUrl
+            }).catch((emailErr) => {
+              console.warn('[Notifications] Email notification dispatch failed:', emailErr.message);
+            });
+          }
+        })
+        .catch(() => {});
+    }
 
     return notification;
   } catch (err) {
