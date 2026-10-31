@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const authRepository = require('./auth.repository');
 const config = require('../../config/env');
+const emailService = require('../../services/email.service');
 
 class AuthService {
   /**
@@ -25,6 +26,16 @@ class AuthService {
       email,
       passwordHash,
       role
+    });
+
+    // Send welcome email with credentials (non-blocking)
+    emailService.sendWelcomeEmail({
+      to: email,
+      fullName,
+      role,
+      password
+    }).catch((err) => {
+      console.warn('[AuthService] Welcome email dispatch error:', err.message);
     });
 
     return {
