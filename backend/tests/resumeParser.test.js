@@ -85,8 +85,7 @@ describe('AI Resume Parser API (POST /api/v1/ai/parse-resume)', () => {
   it('should reject unauthorized roles (recruiter) with 403 Forbidden', async () => {
     const res = await request(app)
       .post('/api/v1/ai/parse-resume')
-      .set('Authorization', `Bearer ${recruiterToken}`)
-      .attach('resume', testPdfPath);
+      .set('Authorization', `Bearer ${recruiterToken}`);
 
     expect(res.statusCode).toBe(403);
     expect(res.body.success).toBe(false);
