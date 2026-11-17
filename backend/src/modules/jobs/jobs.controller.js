@@ -11,6 +11,13 @@ class JobsController {
     } catch (error) { next(error); }
   }
 
+  async myJobs(req, res, next) {
+    try {
+      const jobs = await jobsService.getMyJobs(req.user._id);
+      return successResponse(res, 200, 'Recruiter jobs retrieved successfully', { jobs });
+    } catch (error) { next(error); }
+  }
+
   async list(req, res, next) {
     try { return successResponse(res, 200, 'Jobs retrieved successfully', await jobsService.listJobs(req.query)); } catch (error) { next(error); }
   }

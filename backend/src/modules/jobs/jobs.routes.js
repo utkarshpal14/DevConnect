@@ -22,6 +22,7 @@ const validateJob = [
 ];
 
 router.get('/', cacheMiddleware(60, 'jobs'), (req, res, next) => jobsController.list(req, res, next));
+router.get('/my', authenticate, authorizeRoles('recruiter'), (req, res, next) => jobsController.myJobs(req, res, next));
 router.get('/:jobId', cacheMiddleware(60, 'jobs'), (req, res, next) => jobsController.getOne(req, res, next));
 router.use(authenticate, authorizeRoles('recruiter'));
 router.post('/', validateJob, (req, res, next) => jobsController.create(req, res, next));

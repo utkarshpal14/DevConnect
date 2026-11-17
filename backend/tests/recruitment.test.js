@@ -174,4 +174,52 @@ describe('Milestone 3: Recruiter and Job Management', () => {
     expect(deleteResponse.statusCode).toBe(200);
     expect(await Job.findById(jobId)).toBeNull();
   });
+
+  it('scopes /api/v1/jobs/my to the authenticated recruiter only', async () => {
+    const tokenA = await registerAndLogin('recruiterA@example.com');
+    await request(app)
+      .post('/api/v1/recruiters/profile')
+      .set('Authorization', `Bearer ${tokenA}`)
+      .send({ companyName: 'Company A' });
+    await request(app)
+      .post('/api/v1/jobs')
+      .set('Authorization', `Bearer ${tokenA}`)
+      .send({
+        title: 'Job from A',
+        description: 'Role A',
+        requiredSkills: ['Node.js'],
+        location: 'Remote',
+        employmentType: 'Full-Time'
+      });
+
+    const tokenB = await registerAndLogin('recruiterB@example.com');
+    await request(app)
+      .post('/api/v1/recruiters/profile')
+      .set('Authorization', `Bearer ${tokenB}`)
+      .send({ companyName: 'Company B' });
+    await request(app)
+      .post('/api/v1/jobs')
+      .set('Authorization', `Bearer ${tokenB}`)
+      .send({
+        title: 'Job from B',
+        description: 'Role B',
+        requiredSkills: ['React'],
+        location: 'Remote',
+        employmentType: 'Part-Time'
+      });
+
+    const responseA = await request(app)
+      .get('/api/v1/jobs/my')
+      .set('Authorization', `Bearer ${tokenA}`);
+    expect(responseA.statusCode).toBe(200);
+    expect(responseA.body.data.jobs).toHaveLength(1);
+    expect(responseA.body.data.jobs[0].title).toBe('Job from A');
+
+    const responseB = await request(app)
+      .get('/api/v1/jobs/my')
+      .set('Authorization', `Bearer ${tokenB}`);
+    expect(responseB.statusCode).toBe(200);
+    expect(responseB.body.data.jobs).toHaveLength(1);
+    expect(responseB.body.data.jobs[0].title).toBe('Job from B');
+  });
 });
