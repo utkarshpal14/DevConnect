@@ -51,5 +51,5 @@ export const closeJob = (jobId) => request(`/jobs/${jobId}/close`, {
 
 export const getRecruiterJobs = async () => {
   // Uses the public jobs endpoint and filters or retrieves list
-  return request('/jobs?limit=100');
+  return request('/jobs/my');
 };

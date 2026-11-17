@@ -40,6 +40,12 @@ class JobsService {
     return job;
   }
 
+  async getMyJobs(userId) {
+    const profile = await RecruiterProfile.findOne({ userId }).select('_id');
+    if (!profile) return [];
+    return Job.find({ recruiterId: profile._id }).sort({ createdAt: -1 });
+  }
+
   async listJobs({ page = 1, limit = 10, search, location, employmentType }) {
     const parsedPage = Math.max(Number(page) || 1, 1);
     const parsedLimit = Math.min(Math.max(Number(limit) || 10, 1), 100);
